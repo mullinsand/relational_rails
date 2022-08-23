@@ -1,4 +1,23 @@
-<form action='/chemicals/<% @chemical.id %>' method='post'>
+<%= form_with url: '/chemicals', method: :patch, local: true do |form| %>
+  <%= form.hidden_field :id, value: @chemical[:id] %>
+  <%= form.label :name %>
+  <%= form.text_field :name, :value => @chemical[:name]%> <br>
+  <%= form.label :amount, "Amount in grams"%>
+  <%= form.number_field :amount, :value => @chemical[:amount], in: 0.00..1000000.00, step: 0.01 %> <br>
+  <%= form.radio_button :flammable, "true", :checked => @chemical[:flammable] == true ? true : false %>
+  <%= form.label :flammable_true, "Chemical is flammable"%>
+  <%= form.radio_button :flammable, "false", :checked => @chemical[:flammable] == false ? true : false %>
+  <%= form.label :flammable_false, "Chemical is not flammable"%><br>
+  <%= form.label :storage_id, "Storage Unit"%><br>
+  <%= form.select :storage_id,
+                  @all_units,
+                  selected: @storage_unit_name,
+                  :prompt => "Select Storage Unit"%><br>
+  <%= form.submit 'Edit Chemical' %>
+
+<% end %>
+
+<!--<form action='/chemicals/<% @chemical.id %>' method='post'>
   <input type="hidden" name='authenticity_token' value="<%= form_authenticity_token %>">
   <input type="hidden" name="_method" value="PATCH" />
   <p>Edit</p>
@@ -13,3 +32,4 @@
   <label for="no">No</label><br>
 
   <input type='submit'/>
+</form>

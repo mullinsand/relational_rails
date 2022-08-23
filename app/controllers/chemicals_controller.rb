@@ -4,15 +4,16 @@ class ChemicalsController < ApplicationController
   end
 
   def new
-
+    @storage_units = StorageUnit.all
   end
 
   def create
-    chemical = Chemical.new({
-      name: params[:chemical][:name],
-      amount: params[:chemical][:amount],
-      flammable: params[:chemical][:flammable] == "true" ? true : false
-    })
+    chemical = Chemical.new(
+      name: params[:name],
+      amount: params[:amount],
+      flammable: params[:flammable] == "true" ? true : false,
+      storage_id: params[:storage_id]
+    )
 
     chemical.save
 
@@ -24,15 +25,19 @@ class ChemicalsController < ApplicationController
   end
 
   def edit
+
+    @all_units = StorageUnit.all.map(&:name)
     @chemical = Chemical.find(params[:id])
+    @storage_unit_name = StorageUnit.find(@chemical[:storage_id])[:name]
+
   end
 
   def update
     chemical = Chemical.find(params[:id])
     chemical.update({
-      name: params[:chemical][:name],
-      amount: params[:chemical][:amount],
-      flammable: params[:chemical][:flammable] == "true" ? true : false
+      name: params[:name],
+      amount: params[:amount],
+      flammable: params[:flammable] == "true" ? true : false
     })
     chemical.save
     redirect_to "/chemicals/#{chemical.id}"

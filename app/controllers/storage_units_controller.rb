@@ -9,9 +9,9 @@ class StorageUnitsController < ApplicationController
 
   def create
     storage_unit = StorageUnit.new({
-      name: params[:storage_unit][:name],
-      size: params[:storage_unit][:size],
-      fireproof: params[:storage_unit][:fireproof] == "true" ? true : false
+      name: params[:name],
+      size: params[:size],
+      fireproof: params[:fireproof] == "true" ? true : false
     })
 
     storage_unit.save
@@ -30,9 +30,9 @@ class StorageUnitsController < ApplicationController
   def update
     storage_unit = StorageUnit.find(params[:id])
     storage_unit.update({
-      name: params[:storage_unit][:name],
-      size: params[:storage_unit][:size],
-      fireproof: params[:storage_unit][:fireproof] == "true" ? true : false
+      name: params[:name],
+      size: params[:size],
+      fireproof: params[:fireproof] == "true" ? true : false
     })
     storage_unit.save
     redirect_to "/storage_units/#{storage_unit.id}"

@@ -1,4 +1,18 @@
-<form action='/storage_units/<% @storage_unit.id %>' method='post'>
+<%= form_with url: '/storage_units', method: :patch, local: true do |form| %>
+  <%= form.hidden_field :id, value: @storage_unit[:id] %>
+  <%= form.label :name %>
+  <%= form.text_field :name, :value => @storage_unit[:name]%> <br>
+  <%= form.label :size, "size in sq. ft."%>
+  <%= form.number_field :size, :value => @storage_unit[:size], in: 1.0..50.0, step: 0.5 %> <br>
+  <%= form.radio_button :fireproof, "true", :checked => @storage_unit[:fireproof] == true ? true : false %>
+  <%= form.label :fireproof_true, "storage unit is fireproof"%>
+  <%= form.radio_button :fireproof, "false", :checked => @storage_unit[:fireproof] == false ? true : false %>
+  <%= form.label :fireproof_false, "storage unit is not fireproof"%><br>
+  <%= form.submit 'Edit storage unit' %>
+
+<% end %>
+
+<!-- <form action='/storage_units/<% @storage_unit.id %>' method='post'>
   <input type="hidden" name='authenticity_token' value="<%= form_authenticity_token %>">
   <input type="hidden" name="_method" value="PATCH" />
   <p>Edit</p>
@@ -13,3 +27,4 @@
   <label for="no">No</label><br>
 
   <input type='submit'/>
+</form>

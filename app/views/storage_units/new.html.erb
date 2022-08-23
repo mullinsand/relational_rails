@@ -1,3 +1,21 @@
+<%= form_with url: '/storage_units', method: :post, local: true do |form| %>
+  <%= form.label :name %>
+  <%= form.text_field :name %> <br>
+  <%= form.label :size, "Size in sq. ft."%>
+  <%= form.number_field :size, in: 0.0..100.0, step: 0.5 %> <br>
+  <%= form.radio_button :fireproof, "true"%>
+  <%= form.label :fireproof_true, "Storage is fireproof"%>
+  <%= form.radio_button :fireproof, "false"%>
+  <%= form.label :fireproof_false, "Storage is not fireproof"%><br>
+  <%= form.submit 'Create Storage' %>
+
+<% end %>
+
+
+
+
+
+<!--
 <form action='/storage_units' method='post'>
   <input type="hidden" name='authenticity_token' value="<%= form_authenticity_token %>">
   <p>Add a new storage unit</p>
