@@ -1,0 +1,14 @@
+<h1>Welcome to Chemical Inventory</h1>
+<p>Below is a list of all the storage units available to you<p>
+  <% @storage_units.each do |storage_unit| %>
+    <h3><a href='/storage_units/<%= storage_unit.id %>'><%= storage_unit.name%></a></h3>
+    <a href='storage_units/<%= storage_unit.id%>/edit'>Edit</a>
+    <p>Size: <%= storage_unit.size %> sq. ft.</p>
+    <p>Fireproof? <%= storage_unit.fireproof %></p>
+    <form action='/storage_units/<%= storage_unit.id %>' method='POST'>
+      <input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
+      <input type='hidden' name='_method' value='DELETE'>
+      <input type='submit' value='delete'/>
+    </form>
+  <% end %>
+<a href='storage_units/new'>Add new storage unit</a>

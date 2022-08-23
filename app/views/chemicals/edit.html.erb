@@ -1,0 +1,15 @@
+<form action='/chemicals/<% @chemical.id %>' method='post'>
+  <input type="hidden" name='authenticity_token' value="<%= form_authenticity_token %>">
+  <input type="hidden" name="_method" value="PATCH" />
+  <p>Edit</p>
+  <label for='chemical name'>chemical name (location)</label>
+  <input type='text' id='chemical name' name='chemical[name]' value='<%= @chemical.name %>'/><br/>
+  <label for='amount'>chemical amount in grams</label>
+  <input type='number' id='amount' name='chemical[amount]' value='<%= @chemical.amount %>'/><br/>
+  <label for='flammable'>Is the the chemical flammable?</label>
+  <input type="radio" id="yes" name="chemical[flammable]" value="true">
+  <label for="yes">Yes</label>
+  <input type="radio" id="no" name="chemical[flammable]" value="false">
+  <label for="no">No</label><br>
+
+  <input type='submit'/>

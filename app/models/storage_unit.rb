@@ -1,0 +1,3 @@
+class StorageUnit < ApplicationRecord
+  
+end

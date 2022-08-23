@@ -1,0 +1,14 @@
+<h1>Welcome to Chemical Inventory</h1>
+<p>Below is a list of all the chemicals available to you<p>
+  <% @chemicals.each do |chemical| %>
+    <h3><a href='/chemicals/<%= chemical.id %>'><%= chemical.name%></a></h3>
+    <a href='chemicals/<%= chemical.id%>/edit'>Edit</a>
+    <p>Amount: <%= chemical.amount %> sq. ft.</p>
+    <p>Flammable? <%= chemical.flammable %></p>
+    <form action='/chemicals/<%= chemical.id %>' method='POST'>
+      <input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
+      <input type='hidden' name='_method' value='DELETE'>
+      <input type='submit' value='delete'/>
+    </form>
+  <% end %>
+<a href='chemicals/new'>Add new chemical</a>
