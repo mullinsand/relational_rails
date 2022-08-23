@@ -2,7 +2,7 @@
   <%= form.label :name %>
   <%= form.text_field :name %> <br>
   <%= form.label :size, "Size in sq. ft."%>
-  <%= form.number_field :size, in: 1.0..50.0, step: 0.5 %> <br>
+  <%= form.number_field :size, in: 0.0..100.0, step: 0.5 %> <br>
   <%= form.radio_button :fireproof, "true"%>
   <%= form.label :fireproof_true, "Storage is fireproof"%>
   <%= form.radio_button :fireproof, "false"%>

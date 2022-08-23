@@ -2,7 +2,7 @@
   <%= form.label :name %>
   <%= form.text_field :name %> <br>
   <%= form.label :amount, "Amount in grams"%>
-  <%= form.number_field :amount, in: 1.0..50.0, step: 0.5 %> <br>
+  <%= form.number_field :amount, in: 0.00..1000000.00, step: 0.01 %> <br>
   <%= form.radio_button :flammable, "true"%>
   <%= form.label :flammable_true, "Chemical is flammable"%>
   <%= form.radio_button :flammable, "false"%>

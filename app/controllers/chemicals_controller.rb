@@ -33,7 +33,6 @@ class ChemicalsController < ApplicationController
   end
 
   def update
-    require 'pry'; binding.pry
     chemical = Chemical.find(params[:id])
     chemical.update({
       name: params[:name],
