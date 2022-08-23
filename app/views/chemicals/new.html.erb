@@ -7,9 +7,9 @@
   <%= form.label :flammable_true, "Chemical is flammable"%>
   <%= form.radio_button :flammable, "false"%>
   <%= form.label :flammable_false, "Chemical is not flammable"%><br>
-  <%= form.label :storage_id, "Storage Unit"%><br>
+  <%= form.label :storage_unit_id, "Storage Unit"%><br>
   <% all_units = @storage_units.map(&:name).zip(@storage_units.map(&:id))%>
-  <%= form.select :storage_id,
+  <%= form.select :storage_unit_id,
                   all_units,
                   :prompt => "Select Storage Unit"%>
   <%= form.submit 'Create Chemical' %>
