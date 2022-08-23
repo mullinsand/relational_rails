@@ -18,20 +18,7 @@ RSpec.describe 'Storage Unit index' do
 
     expect(page).to have_content(lab1.name)
     expect(page).to have_content(lab2.name)
-    expect(page).to have_content(lab2.name)
-    expect(page).to have_content(lab2.name)
-
-
-  end
-
-  it 'links to each chemicals show page' do
-    lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
-    ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 3.00, flammable: true)
-    methanol = lab1.chemicals.create!(name: 'methanol', amount: 6.00, flammable: true)
-
-    visit "/storage_units/#{lab1.id}/chemicals"
-
-    click_on ethanol.name
-    expect(current_path).to eq("/chemicals/#{ethanol.id}")
+    expect(page).to have_content(hallway.name)
+    expect(page).to have_content(basement.name)
   end
 end
