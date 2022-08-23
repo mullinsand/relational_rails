@@ -10,18 +10,18 @@ require 'rails_helper'
 RSpec.describe 'Storage Unit index' do
   it 'shows all of the names of each storage unit' do
     lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
-    ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 3.00, flammable: true)
-    methanol = lab1.chemicals.create!(name: 'methanol', amount: 6.00, flammable: true)
+    lab2 = StorageUnit.create!(name: 'lab2', size: 4.0, fireproof: false)
+    hallway = StorageUnit.create!(name: 'hallway', size: 1.5, fireproof: false)
+    basement = StorageUnit.create!(name: 'basement', size: 8.0, fireproof: true)
 
-    visit "/storage_units/#{lab1.id}/chemicals"
+    visit "/storage_units"
 
-    expect(page).to have_content(ethanol.name)
-    expect(page).to have_content(ethanol.amount)
-    expect(page).to have_content(ethanol.flammable)
+    expect(page).to have_content(lab1.name)
+    expect(page).to have_content(lab2.name)
+    expect(page).to have_content(lab2.name)
+    expect(page).to have_content(lab2.name)
 
-    expect(page).to have_content(methanol.name)
-    expect(page).to have_content(methanol.amount)
-    expect(page).to have_content(methanol.flammable)
+
   end
 
   it 'links to each chemicals show page' do
