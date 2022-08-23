@@ -8,8 +8,8 @@
   <%= form.label :flammable_true, "Chemical is flammable"%>
   <%= form.radio_button :flammable, "false", :checked => @chemical[:flammable] == false ? true : false %>
   <%= form.label :flammable_false, "Chemical is not flammable"%><br>
-  <%= form.label :storage_id, "Storage Unit"%><br>
-  <%= form.select :storage_id,
+  <%= form.label :storage_unit_id, "Storage Unit"%><br>
+  <%= form.select :storage_unit_id,
                   @all_units,
                   selected: @storage_unit_name,
                   :prompt => "Select Storage Unit"%><br>

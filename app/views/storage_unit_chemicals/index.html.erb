@@ -1,0 +1,5 @@
+<% @chemicals.each do |chemical| %>
+  <h2><%= link_to chemical.name, "/chemicals/#{chemical.id}" %></h2>
+  <p><%= chemical.amount%></p>
+  <p><%= chemical.flammable%></p>
+<% end %>

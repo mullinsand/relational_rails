@@ -3,7 +3,7 @@
   <% @chemicals.each do |chemical| %>
     <h3><a href='/chemicals/<%= chemical.id %>'><%= chemical.name%></a></h3>
     <a href='chemicals/<%= chemical.id%>/edit'>Edit</a>
-    <p>Amount: <%= chemical.amount %> sq. ft.</p>
+    <p>Amount: <%= chemical.amount %> grams</p>
     <p>Flammable? <%= chemical.flammable %></p>
     <form action='/chemicals/<%= chemical.id %>' method='POST'>
       <input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
