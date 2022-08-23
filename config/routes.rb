@@ -10,6 +10,8 @@ Rails.application.routes.draw do
   patch '/storage_units/', to: 'storage_units#update'
   delete '/storage_units/:id', to: 'storage_units#destory'
 
+  get '/storage_units/:id/chemicals', to: 'storage_unit_chemicals#index'
+
   get '/chemicals', to: 'chemicals#index'
   get '/chemicals/new', to: 'chemicals#new'
   post '/chemicals', to: 'chemicals#create'
