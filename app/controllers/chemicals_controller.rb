@@ -8,7 +8,6 @@ class ChemicalsController < ApplicationController
   end
 
   def create
-require 'pry'; binding.pry
     chemical = Chemical.new(
       name: params[:name],
       amount: params[:amount],
@@ -26,15 +25,20 @@ require 'pry'; binding.pry
   end
 
   def edit
+
+    @all_units = StorageUnit.all.map(&:name)
     @chemical = Chemical.find(params[:id])
+    @storage_unit_name = StorageUnit.find(@chemical[:storage_id])[:name]
+
   end
 
   def update
+    require 'pry'; binding.pry
     chemical = Chemical.find(params[:id])
     chemical.update({
-      name: params[:chemical][:name],
-      amount: params[:chemical][:amount],
-      flammable: params[:chemical][:flammable] == "true" ? true : false
+      name: params[:name],
+      amount: params[:amount],
+      flammable: params[:flammable] == "true" ? true : false
     })
     chemical.save
     redirect_to "/chemicals/#{chemical.id}"
