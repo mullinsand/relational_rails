@@ -1,3 +1,4 @@
+<%= render "partials/menu" %>
 <%= form_with url: '/storage_units', method: :patch, local: true do |form| %>
   <%= form.hidden_field :id, value: @storage_unit[:id] %>
   <%= form.label :name %>

@@ -1,3 +1,4 @@
+<%= render "partials/menu" %>
 <%= form_with url: '/chemicals', method: :patch, local: true do |form| %>
   <%= form.hidden_field :id, value: @chemical[:id] %>
   <%= form.label :name %>
