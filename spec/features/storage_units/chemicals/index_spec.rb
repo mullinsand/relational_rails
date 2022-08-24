@@ -89,5 +89,9 @@ RSpec.describe 'Storage Unit chemicals index' do
     visit "/storage_units/#{lab1.id}/chemicals"
 
     expect("Name: ethanol").to appear_before("Name: acetone", only_text: true)
+
+    click_link("Sort in Alphabetical Order")
+
+    expect("Name: acetone").to appear_before("Name: ethanol", only_text: true)
   end
 end
