@@ -1,5 +1,39 @@
-<% @chemicals.each do |chemical| %>
-  <h2><%= link_to chemical.name, "/chemicals/#{chemical.id}" %></h2>
-  <p><%= chemical.amount%></p>
-  <p><%= chemical.flammable%></p>
-<% end %>
+<%= render "partials/menu" %>
+
+<head>
+<style>
+  table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+  th, td {
+  padding: 15px;
+  text-align: center;
+}
+</style>
+</head>
+<p><%= "Below is a list of all the chemicals in the #{@storage_unit.name} storage unit"%><p>
+<table>
+    <tr>
+      <th><%= link_to "Name", :sort => "name" %></th>
+      <th>Amount(grams)</th>
+      <th>Flammable</th>
+      <th><%= link_to "Created", :sort => "created_at" %></th>
+      <th>Last updated</th>
+      <th>Edit</th>
+      <th>Delete</th>
+    </tr>
+    <% @chemicals.each do |chemical| %>
+      <tr>
+        <td><%= link_to chemical.name, "/chemicals/#{chemical.id}"%></td>
+        <td><%= chemical.amount %></td>
+        <td><%= chemical.flammable %></td>
+        <td><%= chemical.created_at %></td>
+        <td><%= chemical.updated_at %></td>
+        <td><a href='chemicals/<%= chemical.id%>/edit'>Edit</a></td>
+        <td><%= form_with url: "/chemicals/#{chemical.id}", method: :delete, local: true do |form|%>
+          <%= form.submit 'Delete'%>
+        <%end%></td>
+      </tr>
+    <% end %>
+</table>

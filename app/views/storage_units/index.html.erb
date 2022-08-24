@@ -1,11 +1,36 @@
+<%= render "partials/menu" %>
+<head>
+<style>
+  table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+  th, td {
+  padding: 15px;
+  text-align: center;
+}
+</style>
+</head>
 <h1>Welcome to Chemical Inventory</h1>
 <p>Below is a list of all the storage units available to you<p>
-  <% @storage_units.each do |storage_unit| %>
-    <h3><%= link_to storage_unit.name, "/storage_units/#{storage_unit.id}"%>
-    <a href='storage_units/<%= storage_unit.id%>/edit'>Edit</a>
-    <%= form_with url: "/storage_units/#{storage_unit.id}", method: :delete, local: true do |form|%>
-      <%= form.submit 'Delete'%>
-    <%end%></h3>
-  <% end %>
-<a href='storage_units/new'>Add new storage unit</a>
+    <table>
+    <tr>
+      <th>Name</th>
+      <th>Create</th>
+      <th>Edit</th>
+      <th>Delete</th>
+    </tr>
+    <% @storage_units_sorted.each do |storage_unit| %>
+      <tr>
+        <td><%= link_to storage_unit.name, "/storage_units/#{storage_unit.id}"%></td>
+        <td><%= storage_unit.created_at %></td>
+        <td><a href='storage_units/<%= storage_unit.id%>/edit'>Edit</a></td>
+        <td><%= form_with url: "/storage_units/#{storage_unit.id}", method: :delete, local: true do |form|%>
+          <%= form.submit 'Delete'%>
+        <%end%></td>
+      </tr>
+    <% end %>
+  </table>
+<a href='storage_units/new'>Add new storage_unit</a><br>
 <a href='/'>Back to home page</a>
+

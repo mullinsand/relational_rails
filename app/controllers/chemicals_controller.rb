@@ -18,7 +18,7 @@ class ChemicalsController < ApplicationController
 
     chemical.save
 
-    redirect_to '/chemicals'
+    redirect_to "/storage_units/#{chemical.storage_unit_id}/chemicals"
   end
 
   def show
@@ -43,7 +43,7 @@ class ChemicalsController < ApplicationController
       storage_unit_id: params[:storage_unit_id]
     })
     chemical.save
-    redirect_to "/chemicals/#{chemical.id}"
+    redirect_to "/storage_units/#{chemical.storage_unit_id}/chemicals"
   end
 
   def destory
