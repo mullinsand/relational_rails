@@ -48,6 +48,7 @@ group :development do
   gem 'simplecov'
   gem 'capybara'
   gem 'launchy' #save and open page
+  gem 'orderly'
 end
 
 

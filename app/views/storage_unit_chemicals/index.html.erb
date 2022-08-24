@@ -13,7 +13,7 @@
 </style>
 </head>
 <p><%= "Below is a list of all the chemicals in the #{@storage_unit.name} storage unit"%><p>
-<p><%= link_to "Sort in Alphabetical Order", "/storage_units/#{@storage_unit.id}/chemicals", sort_by: "name" %></p>
+  <p><%= link_to "Sort in Alphabetical Order", :sort => "name" %></p>
 <table>
     <tr>
       <th>Name</th>
