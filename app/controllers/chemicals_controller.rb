@@ -22,6 +22,7 @@ class ChemicalsController < ApplicationController
   end
 
   def show
+    @storage_units = StorageUnit.all
     @chemical = Chemical.find(params[:id])
   end
 

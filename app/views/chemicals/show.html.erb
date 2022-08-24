@@ -1,8 +1,33 @@
-<a href="/chemicals">Back to chemicals</a>
-
-<h1><%= @chemical.name %></h1>
-
-<p><%= @chemical.amount %></p>
-<p><%= @chemical.flammable %></p>
+<a href="/chemicals">Back to Storage Units</a>
+<head>
+<style>
+  table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+  th, td {
+  padding: 15px;
+  text-align: center;
+}
+</style>
+</head>
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Amount(grams)</th>
+    <th>Flammable</th>
+    <th>Location</th>
+    <th>Created</th>
+    <th>Last updated</th>
+  </tr>
+  <tr>
+    <td><%= @chemical.name %></td>
+    <td><%= @chemical.amount %></td>
+    <td><%= @chemical.flammable %></td>
+    <td><%= link_to @storage_units.find(@chemical.storage_unit_id).name, "/storage_units/#{@chemical.storage_unit_id}" %></td>
+    <td><%= @chemical.created_at %></td>
+    <td><%= @chemical.updated_at %></td>
+  </tr>
+</table>
 
 <a href='/chemicals/<%= @chemical.id %>/edit'>Edit</a>
