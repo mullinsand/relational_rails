@@ -11,6 +11,8 @@ Rails.application.routes.draw do
   delete '/storage_units/:id', to: 'storage_units#destory'
 
   get '/storage_units/:id/chemicals', to: 'storage_unit_chemicals#index'
+  get '/storage_units/:id/chemicals/new', to: 'chemicals#new'
+  post '/storage_units/:id/chemicals/', to: 'chemicals#create'
 
   get '/chemicals', to: 'chemicals#index'
   get '/chemicals/new', to: 'chemicals#new'
@@ -19,4 +21,5 @@ Rails.application.routes.draw do
   get '/chemicals/:id/edit', to: 'chemicals#edit'
   patch '/chemicals/', to: 'chemicals#update'
   delete '/chemicals/:id', to: 'chemicals#destory'
+
 end

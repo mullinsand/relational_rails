@@ -69,6 +69,18 @@ RSpec.describe 'Storage Unit index' do
       click_link("Storage Unit Index")
       expect(current_path).to eq("/storage_units/")
     end
+
+    it 'has link to create new storage unit record' do
+      lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
+  
+      ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 600.00, flammable: true, storage_unit_id: 1)
+  
+      visit "/storage_units"
+  
+      expect(page).to have_link("Add new storage unit")
+      click_link("Add new storage unit")
+      expect(current_path).to eq("/storage_units/new")
+    end
   end
 
 
