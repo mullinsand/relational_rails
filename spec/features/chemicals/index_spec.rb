@@ -8,6 +8,9 @@ require 'rails_helper'
 
 RSpec.describe 'Chemicals index' do
   it 'lists all of the names of each Chemical' do
+    lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
+    lab2 = StorageUnit.create!(name: 'lab2', size: 4.0, fireproof: false)
+
     ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 600.00, flammable: true)
     methanol = lab1.chemicals.create!(name: 'methanol', amount: 500.00, flammable: true)
     propanol = lab1.chemicals.create!(name: 'propanol', amount: 2000.00, flammable: true)
@@ -22,5 +25,16 @@ RSpec.describe 'Chemicals index' do
     expect(page).to have_content(ethanol.flammable)
     expect(page).to have_content(potassium_oxalate.name)
     expect(page).to have_content(potassium_oxalate.flammable)
+  end
+
+  it 'has link to chemicals index' do
+    visit "/chemicals"
+
+    expect(page).to have_link("Chemicals Index")
+  end
+  it 'has link to storage units index' do
+    visit "/chemicals"
+
+    expect(page).to have_link("Storage Unit Index")
   end
 end
