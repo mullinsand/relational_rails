@@ -12,6 +12,7 @@ Rails.application.routes.draw do
 
   get '/storage_units/:id/chemicals', to: 'storage_unit_chemicals#index'
   get '/storage_units/:id/chemicals/new', to: 'chemicals#new'
+  post '/storage_units/:id/chemicals/', to: 'chemicals#create'
 
   get '/chemicals', to: 'chemicals#index'
   get '/chemicals/new', to: 'chemicals#new'
