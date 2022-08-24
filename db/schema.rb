@@ -19,9 +19,10 @@ ActiveRecord::Schema.define(version: 2022_08_23_210404) do
     t.string "name"
     t.float "amount"
     t.boolean "flammable"
-    t.integer "storage_unit_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "storage_unit_id"
+    t.index ["storage_unit_id"], name: "index_chemicals_on_storage_unit_id"
   end
 
   create_table "storage_units", force: :cascade do |t|
@@ -33,5 +34,4 @@ ActiveRecord::Schema.define(version: 2022_08_23_210404) do
   end
 
   add_foreign_key "chemicals", "storage_units"
-  add_foreign_key "chemicals", "storage_units", name: "storage_unit_id"
 end
