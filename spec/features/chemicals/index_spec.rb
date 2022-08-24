@@ -31,10 +31,14 @@ RSpec.describe 'Chemicals index' do
     visit "/chemicals"
 
     expect(page).to have_link("Chemicals Index")
+    click_link("Chemicals Index")
+    expect(current_path).to eq("/chemicals/")
   end
   it 'has link to storage units index' do
     visit "/chemicals"
 
     expect(page).to have_link("Storage Unit Index")
+    click_link("Storage Unit Index")
+    expect(current_path).to eq("/storage_units/")
   end
 end

@@ -54,6 +54,8 @@ RSpec.describe 'Storage Unit show' do
 
 
     expect(page).to have_link("Chemicals Index")
+    click_link("Chemicals Index")
+    expect(current_path).to eq("/chemicals/")
   end
   it 'has link to storage units index' do
     lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
@@ -64,5 +66,20 @@ RSpec.describe 'Storage Unit show' do
 
 
     expect(page).to have_link("Storage Unit Index")
+    click_link("Storage Unit Index")
+    expect(current_path).to eq("/storage_units/")
+  end
+
+  it 'has link to chemicals in that storage' do
+    lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
+
+    ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 600.00, flammable: true, storage_unit_id: 1)
+    
+    visit "/storage_units/#{lab1.id}"
+
+
+    expect(page).to have_link("Chemicals")
+    click_link("Chemicals")
+    expect(current_path).to eq("/storage_units/#{lab1.id}/chemicals")
   end
 end
