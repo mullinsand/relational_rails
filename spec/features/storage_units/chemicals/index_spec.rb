@@ -66,4 +66,20 @@ RSpec.describe 'Storage Unit chemicals index' do
     click_link("Add New Chemical to #{lab1.name}")
     expect(current_path).to eq("/storage_units/#{lab1.id}/chemicals/new")
   end
+
+  it 'has a link to sort by alphabetical order' do
+    lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
+    ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 3.00, flammable: true)
+    methanol = lab1.chemicals.create!(name: 'methanol', amount: 500.00, flammable: true, storage_unit_id: lab1.id)
+    propanol = lab1.chemicals.create!(name: 'propanol', amount: 2000.00, flammable: true, storage_unit_id: lab1.id)
+    acetone = lab1.chemicals.create!(name: 'acetone', amount: 20000.00, flammable: true, storage_unit_id: lab1.id)
+
+    visit "/storage_units/#{lab1.id}/chemicals"
+
+    expect(page).to have_link("Sort in Alphabetical Order")
+  end
+
+  it 'reloads page upon clicking alphabetical order link with chemicals in alpha order' do
+
+  end
 end

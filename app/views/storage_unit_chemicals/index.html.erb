@@ -13,12 +13,13 @@
 </style>
 </head>
 <p><%= "Below is a list of all the chemicals in the #{@storage_unit.name} storage unit"%><p>
+<p><%= link_to "Sort in Alphabetical Order", "/storage_units/#{@storage_unit.id}/chemicals", sort_by: "name" %></p>
 <table>
     <tr>
-      <th><%= link_to "Name", :sort => "name" %></th>
+      <th>Name</th>
       <th>Amount(grams)</th>
       <th>Flammable</th>
-      <th><%= link_to "Created", :sort => "created_at" %></th>
+      <th>Created</th>
       <th>Last updated</th>
       <th>Edit</th>
       <th>Delete</th>
