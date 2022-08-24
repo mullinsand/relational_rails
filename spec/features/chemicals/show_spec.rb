@@ -7,7 +7,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Storage Unit show' do
-  it 'shows all of the attributes of the selected storage unit' do
+  it 'shows all of the attributes of the selected chemical' do
     lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
     lab2 = StorageUnit.create!(name: 'lab2', size: 4.0, fireproof: false)
     hallway = StorageUnit.create!(name: 'hallway', size: 1.5, fireproof: false)
@@ -25,8 +25,31 @@ RSpec.describe 'Storage Unit show' do
     expect(page).to have_content(ethanol.name)
     expect(page).to have_content(ethanol.amount)
     expect(page).to have_content(ethanol.flammable)
-    expect(page).to have_content(ethanol.storage_unit_id)
+    expect(page).to have_content(lab1.name)
     expect(page).to have_content(ethanol.created_at)
     expect(page).to have_content(ethanol.updated_at)
+  end
+
+  it 'has link to chemicals index' do
+    lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
+
+    ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 600.00, flammable: true, storage_unit_id: 1)
+
+    visit "/chemicals/#{ethanol.id}"
+
+    expect(page).to have_link("Chemicals Index")
+    click_link("Chemicals Index")
+    expect(current_path).to eq("/chemicals/")
+  end
+  it 'has link to storage units index' do
+    lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
+
+    ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 600.00, flammable: true, storage_unit_id: 1)
+
+    visit "/chemicals/#{ethanol.id}"
+
+    expect(page).to have_link("Storage Unit Index")
+    click_link("Storage Unit Index")
+    expect(current_path).to eq("/storage_units/")
   end
 end
