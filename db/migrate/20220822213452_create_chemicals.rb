@@ -4,7 +4,6 @@ class CreateChemicals < ActiveRecord::Migration[5.2]
       t.string :name
       t.float :amount
       t.boolean :flammable
-      t.integer :storage_id
       t.timestamps
     end
   end

@@ -1,6 +1,7 @@
 class ChemicalsController < ApplicationController
   def index
     @chemicals = Chemical.all
+    @storage_units = StorageUnit.all
   end
 
   def new
