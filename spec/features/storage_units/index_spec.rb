@@ -5,6 +5,13 @@
 # When I visit '/parents'
 # Then I see the name of each parent record in the system
 
+# User Story 6, Parent Index sorted by Most Recently Created 
+
+# As a visitor
+# When I visit the parent index,
+# I see that records are ordered by most recently created first
+# And next to each of the records I see when it was created
+
 require 'rails_helper'
 
 RSpec.describe 'Storage Unit index' do
@@ -21,4 +28,8 @@ RSpec.describe 'Storage Unit index' do
     expect(page).to have_content(hallway.name)
     expect(page).to have_content(basement.name)
   end
+
+  it 'orders the storage units by most recently created first'
+
+  it 'includes the timestamp of when each was created'
 end
