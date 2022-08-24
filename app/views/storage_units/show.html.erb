@@ -1,4 +1,4 @@
-<a href="/storage_units">Back to Storage Units</a>
+<%= render "partials/menu" %>
 <head>
 <style>
   table, th, td {
@@ -7,6 +7,7 @@
 }
   th, td {
   padding: 15px;
+  text-align: center;
 }
 </style>
 </head>
@@ -15,6 +16,8 @@
     <th>Name</th>
     <th>Size(sq.ft.)</th>
     <th>Fireproof?</th>
+    <th>Chemicals</th>
+    <th>Number of Chemicals</th>
     <th>Created</th>
     <th>Last updated</th>
   </tr>
@@ -22,6 +25,8 @@
     <td><%= @storage_unit.name %></td>
     <td><%= @storage_unit.size %></td>
     <td><%= @storage_unit.fireproof %></td>
+    <td><%= link_to "Chemicals", "/storage_units/#{@storage_unit.id}/chemicals"%></td>
+    <td><%= @storage_unit.chemicals.count %></td>
     <td><%= @storage_unit.created_at %></td>
     <td><%= @storage_unit.updated_at %></td>
   </tr>

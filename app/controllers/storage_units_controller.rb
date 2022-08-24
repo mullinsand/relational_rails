@@ -1,6 +1,6 @@
 class StorageUnitsController < ApplicationController
   def index
-    @storage_units = StorageUnit.all
+    @storage_units_sorted = StorageUnit.sort_by_creation
   end
 
   def new

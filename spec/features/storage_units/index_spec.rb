@@ -15,21 +15,38 @@
 require 'rails_helper'
 
 RSpec.describe 'Storage Unit index' do
-  it 'lists all of the names of each storage unit' do
-    lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
-    lab2 = StorageUnit.create!(name: 'lab2', size: 4.0, fireproof: false)
-    hallway = StorageUnit.create!(name: 'hallway', size: 1.5, fireproof: false)
-    basement = StorageUnit.create!(name: 'basement', size: 8.0, fireproof: true)
+  describe 'as a user' do
+    it 'lists all of the names of each storage unit' do
+      lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
+      lab2 = StorageUnit.create!(name: 'lab2', size: 4.0, fireproof: false)
+      hallway = StorageUnit.create!(name: 'hallway', size: 1.5, fireproof: false)
+      basement = StorageUnit.create!(name: 'basement', size: 8.0, fireproof: true)
 
-    visit "/storage_units"
+      visit "/storage_units"
 
-    expect(page).to have_content(lab1.name)
-    expect(page).to have_content(lab2.name)
-    expect(page).to have_content(hallway.name)
-    expect(page).to have_content(basement.name)
+      expect(page).to have_content(lab1.name)
+      expect(page).to have_content(lab2.name)
+      expect(page).to have_content(hallway.name)
+      expect(page).to have_content(basement.name)
+    end
+
+    it 'includes the timestamp of when each was created' do
+      lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
+      sleep(1)
+      lab2 = StorageUnit.create!(name: 'lab2', size: 4.0, fireproof: false)
+      sleep(1)
+      hallway = StorageUnit.create!(name: 'hallway', size: 1.5, fireproof: false)
+      sleep(1)
+      basement = StorageUnit.create!(name: 'basement', size: 8.0, fireproof: true)
+
+      visit "/storage_units"
+
+      expect(page).to have_content(lab1.created_at)
+      expect(page).to have_content(lab2.created_at)
+      expect(page).to have_content(hallway.created_at)
+      expect(page).to have_content(basement.created_at)
+    end
   end
 
-  it 'orders the storage units by most recently created first'
 
-  it 'includes the timestamp of when each was created'
 end
