@@ -8,7 +8,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Storage Unit index' do
-  it 'shows all of the names of each storage unit' do
+  it 'lists all of the names of each storage unit' do
     lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
     lab2 = StorageUnit.create!(name: 'lab2', size: 4.0, fireproof: false)
     hallway = StorageUnit.create!(name: 'hallway', size: 1.5, fireproof: false)

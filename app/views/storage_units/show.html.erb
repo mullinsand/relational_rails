@@ -1,8 +1,31 @@
 <a href="/storage_units">Back to Storage Units</a>
-
-<h1><%= @storage_unit.name %></h1>
-
-<p><%= @storage_unit.size %></p>
-<p><%= @storage_unit.fireproof %></p>
+<head>
+<style>
+  table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+  th, td {
+  padding: 15px;
+}
+</style>
+</head>
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Size(sq.ft.)</th>
+    <th>Fireproof?</th>
+    <th>Created</th>
+    <th>Last updated</th>
+  </tr>
+  <tr>
+    <td><%= @storage_unit.name %></td>
+    <td><%= @storage_unit.size %></td>
+    <td><%= @storage_unit.fireproof %></td>
+    <td><%= @storage_unit.created_at %></td>
+    <td><%= @storage_unit.updated_at %></td>
+  </tr>
+</table>
 
 <a href='/storage_units/<%= @storage_unit.id %>/edit'>Edit</a>
+<%# <%= link_to "Created", :sort => "created"%>
