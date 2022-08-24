@@ -19,6 +19,10 @@ class StorageUnitsController < ApplicationController
     redirect_to '/storage_units'
   end
 
+  def storage_unit_params
+    params.permit(:name, :size, :fireproof)
+  end
+
   def show
     @storage_unit = StorageUnit.find(params[:id])
   end
