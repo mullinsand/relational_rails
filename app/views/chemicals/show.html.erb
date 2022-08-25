@@ -19,6 +19,7 @@
     <th>Location</th>
     <th>Created</th>
     <th>Last updated</th>
+    <th>Delete</th>
   </tr>
   <tr>
     <td><%= @chemical.name %></td>
@@ -27,6 +28,9 @@
     <td><%= link_to @storage_units.find(@chemical.storage_unit_id).name, "/storage_units/#{@chemical.storage_unit_id}" %></td>
     <td><%= @chemical.created_at %></td>
     <td><%= @chemical.updated_at %></td>
+    <td><%= form_with url: "/chemicals/#{@chemical.id}", method: :delete, local: true do |form|%>
+      <%= form.submit "Delete #{@chemical.name}"%>
+    <%end%></td>
   </tr>
 </table>
 
