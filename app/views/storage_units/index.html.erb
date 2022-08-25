@@ -24,9 +24,9 @@
       <tr>
         <td><%= link_to storage_unit.name, "/storage_units/#{storage_unit.id}"%></td>
         <td><%= storage_unit.created_at %></td>
-        <td><%= link_to 'Edit', "/storage_units/#{storage_unit.id}/edit"%></td>
+        <td><%= link_to "Edit #{storage_unit.name}", "/storage_units/#{storage_unit.id}/edit"%></td>
         <td><%= form_with url: "/storage_units/#{storage_unit.id}", method: :delete, local: true do |form|%>
-          <%= form.submit 'Delete'%>
+          <%= form.submit "Delete #{storage_unit.name}"%>
         <%end%></td>
       </tr>
     <% end %>

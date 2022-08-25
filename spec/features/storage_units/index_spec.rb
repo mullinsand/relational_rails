@@ -81,6 +81,25 @@ RSpec.describe 'Storage Unit index' do
       click_link("Add new storage unit")
       expect(current_path).to eq("/storage_units/new")
     end
+
+    it 'has a link to edit storage unit info on index page' do
+      lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
+      lab2 = StorageUnit.create!(name: 'lab2', size: 4.0, fireproof: false)
+      hallway = StorageUnit.create!(name: 'hallway', size: 1.5, fireproof: false)
+      basement = StorageUnit.create!(name: 'basement', size: 8.0, fireproof: true)
+
+      visit "/storage_units"
+
+      expect(page).to have_link("Edit #{lab1.name}")
+      click_link("Edit #{lab1.name}")
+      expect(current_path).to eq("/storage_units/#{lab1.id}/edit")
+
+      visit "/storage_units"
+      
+      expect(page).to have_link("Edit #{hallway.name}")
+      click_link("Edit #{hallway.name}")
+      expect(current_path).to eq("/storage_units/#{hallway.id}/edit")
+    end
   end
 
 

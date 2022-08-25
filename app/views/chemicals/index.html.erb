@@ -32,9 +32,9 @@
         <td><%= link_to @storage_units.find(chemical.storage_unit_id).name, "/storage_units/#{chemical.storage_unit_id}" %></td>
         <td><%= chemical.created_at %></td>
         <td><%= chemical.updated_at %></td>
-        <td><a href='chemicals/<%= chemical.id%>/edit'>Edit</a></td>
+        <td><%= link_to "Edit #{chemical.name}", "/chemicals/#{chemical.id}/edit" %></td>
         <td><%= form_with url: "/chemicals/#{chemical.id}", method: :delete, local: true do |form|%>
-          <%= form.submit 'Delete'%>
+          <%= form.submit "Delete #{chemical.name}"%>
         <%end%></td>
       </tr>
     <% end %>
