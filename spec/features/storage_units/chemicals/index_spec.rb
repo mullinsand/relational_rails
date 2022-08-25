@@ -79,7 +79,7 @@ RSpec.describe 'Storage Unit chemicals index' do
     expect(page).to have_link("Sort in Alphabetical Order")
   end
 
-  xit 'reloads page upon clicking alphabetical order link with chemicals in alpha order' do
+  it 'reloads page upon clicking alphabetical order link with chemicals in alpha order' do
     lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
     ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 3.00, flammable: true)
     methanol = lab1.chemicals.create!(name: 'methanol', amount: 500.00, flammable: true, storage_unit_id: lab1.id)
@@ -88,11 +88,11 @@ RSpec.describe 'Storage Unit chemicals index' do
 
     visit "/storage_units/#{lab1.id}/chemicals"
 
-    expect("Name: ethanol").to appear_before("Name: acetone", only_text: true)
+    expect("ethanol").to appear_before("acetone", only_text: true)
 
     click_link("Sort in Alphabetical Order")
 
-    expect("Name: acetone").to appear_before("Name: ethanol", only_text: true)
+    expect("acetone").to appear_before("ethanol", only_text: true)
   end
 
   it 'has a link to edit chemical info on index page' do

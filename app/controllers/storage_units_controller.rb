@@ -1,6 +1,13 @@
 class StorageUnitsController < ApplicationController
   def index
-    @storage_units_sorted = StorageUnit.sort_by_creation
+    @storage_units_sorted =
+    if params[:sort]
+      StorageUnit.sort_by_chemicals
+    elsif params[:search_exact]
+      StorageUnit.search_exact(params[:search_exact])
+    else
+      StorageUnit.sort_by_creation
+    end
   end
 
   def new

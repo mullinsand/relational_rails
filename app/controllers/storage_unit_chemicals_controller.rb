@@ -5,8 +5,6 @@ class StorageUnitChemicalsController < ApplicationController
       @storage_unit.chemicals.order(:name)
     elsif params[:threshold_search]
       @storage_unit.chemicals.select { |chemical| chemical.amount > params[:threshold_search].to_f}
-    # elsif params[:chemical_count]
-    #   @
     else
       @storage_unit.chemicals
     end
