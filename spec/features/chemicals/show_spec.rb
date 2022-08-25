@@ -52,4 +52,30 @@ RSpec.describe 'Storage Unit show' do
     click_link("Storage Unit Index")
     expect(current_path).to eq("/storage_units/")
   end
+
+  it 'can be deleted' do
+    lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
+
+    ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 600.00, flammable: true, storage_unit_id: 1)
+    methanol = lab1.chemicals.create!(name: 'methanol', amount: 500.00, flammable: true, storage_unit_id: 1)
+    propanol = lab1.chemicals.create!(name: 'propanol', amount: 2000.00, flammable: true, storage_unit_id: 1)
+
+    visit "/chemicals/#{ethanol.id}"
+    expect(page).to have_content(ethanol.name)
+
+    expect(page).to have_button("Delete #{ethanol.name}")
+    click_button("Delete #{ethanol.name}")
+    expect(current_path).to eq("/chemicals")
+
+    visit "/chemicals"
+
+    expect(page).to have_button("Delete #{methanol.name}")
+    click_button("Delete #{methanol.name}")
+    expect(current_path).to eq("/chemicals")
+
+    visit "/chemicals"
+
+    expect(page).to_not have_content(ethanol.name)
+    expect(page).to_not have_content(methanol.name)
+  end
 end

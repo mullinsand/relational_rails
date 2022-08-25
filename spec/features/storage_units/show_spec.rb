@@ -82,4 +82,41 @@ RSpec.describe 'Storage Unit show' do
     click_link("Chemicals")
     expect(current_path).to eq("/storage_units/#{lab1.id}/chemicals")
   end
+
+  it 'can be deleted' do
+    lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
+
+    ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 600.00, flammable: true, storage_unit_id: 1)
+    methanol = lab1.chemicals.create!(name: 'methanol', amount: 500.00, flammable: true, storage_unit_id: 1)
+    propanol = lab1.chemicals.create!(name: 'propanol', amount: 2000.00, flammable: true, storage_unit_id: 1)
+
+    visit "/storage_units/#{lab1.id}"
+    expect(page).to have_content(lab1.name)
+
+    expect(page).to have_button("Delete #{lab1.name}")
+    click_button("Delete #{lab1.name}")
+    expect(current_path).to eq("/storage_units")
+
+    visit "/storage_units"
+
+    expect(page).to_not have_content(lab1.name)
+  end
+
+  it 'deletes all chemicals inside storage unit when storage unit is deleted' do
+    lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
+
+    ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 600.00, flammable: true, storage_unit_id: 1)
+    methanol = lab1.chemicals.create!(name: 'methanol', amount: 500.00, flammable: true, storage_unit_id: 1)
+    propanol = lab1.chemicals.create!(name: 'propanol', amount: 2000.00, flammable: true, storage_unit_id: 1)
+
+    visit "/storage_units/#{lab1.id}"
+    click_button("Delete #{lab1.name}")
+    expect(current_path).to eq("/storage_units")
+
+    visit "/chemicals"
+
+    expect(page).to_not have_content(ethanol.name)
+    expect(page).to_not have_content(methanol.name)
+    expect(page).to_not have_content(propanol.name)
+  end
 end
