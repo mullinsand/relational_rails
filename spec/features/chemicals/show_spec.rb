@@ -67,6 +67,15 @@ RSpec.describe 'Storage Unit show' do
     click_button("Delete #{ethanol.name}")
     expect(current_path).to eq("/chemicals")
 
+    visit "/chemicals"
+
+    expect(page).to have_button("Delete #{methanol.name}")
+    click_button("Delete #{methanol.name}")
+    expect(current_path).to eq("/chemicals")
+
+    visit "/chemicals"
+
     expect(page).to_not have_content(ethanol.name)
+    expect(page).to_not have_content(methanol.name)
   end
 end
