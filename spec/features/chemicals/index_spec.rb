@@ -104,4 +104,15 @@ RSpec.describe 'Chemicals index' do
     expect(page).to have_content(methanol.name)
     expect(page).to_not have_content(propanol.name)
   end
+
+  it 'has link to add a new chemical' do
+    lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
+    ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 3.00, flammable: true)
+    
+    visit "/chemicals"
+
+    expect(page).to have_link("Add new chemical")
+    click_link("Add new chemical")
+    expect(current_path).to eq("/chemicals/new")
+  end
 end

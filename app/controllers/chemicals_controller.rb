@@ -11,7 +11,12 @@ class ChemicalsController < ApplicationController
 
   def new
     @storage_units = StorageUnit.all
-    @storage_unit_name = [StorageUnit.find(params[:id])[:name], StorageUnit.find(params[:id])[:id]]
+    @storage_unit_name = 
+    if params[:id]
+      [StorageUnit.find(params[:id])[:name], StorageUnit.find(params[:id])[:id]]
+    else
+      [StorageUnit.first[:name], StorageUnit.first[:id]]
+    end
   end
 
   def create
