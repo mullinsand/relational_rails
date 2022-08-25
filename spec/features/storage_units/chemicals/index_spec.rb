@@ -79,7 +79,7 @@ RSpec.describe 'Storage Unit chemicals index' do
     expect(page).to have_link("Sort in Alphabetical Order")
   end
 
-  it 'reloads page upon clicking alphabetical order link with chemicals in alpha order' do
+  xit 'reloads page upon clicking alphabetical order link with chemicals in alpha order' do
     lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
     ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 3.00, flammable: true)
     methanol = lab1.chemicals.create!(name: 'methanol', amount: 500.00, flammable: true, storage_unit_id: lab1.id)
@@ -113,5 +113,24 @@ RSpec.describe 'Storage Unit chemicals index' do
     expect(page).to have_link("Edit #{acetone.name}")
     click_link("Edit #{acetone.name}")
     expect(current_path).to eq("/chemicals/#{acetone.id}/edit")
+  end
+
+  it 'has a form to display chemicals with more than XX grams' do
+    lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
+    ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 3.00, flammable: true)
+    methanol = lab1.chemicals.create!(name: 'methanol', amount: 500.00, flammable: true, storage_unit_id: lab1.id)
+    propanol = lab1.chemicals.create!(name: 'propanol', amount: 2000.00, flammable: true, storage_unit_id: lab1.id)
+    acetone = lab1.chemicals.create!(name: 'acetone', amount: 20000.00, flammable: true, storage_unit_id: lab1.id)
+
+    visit "/storage_units/#{lab1.id}/chemicals"
+
+    fill_in(:threshold_search, with: 750)
+    click_button("Only returns chemicals with more than this amount in grams")
+
+    expect(current_path).to eq("/storage_units/#{lab1.id}/chemicals")
+    expect(page).to_not have_content(methanol.name)
+    expect(page).to_not have_content(ethanol.name)
+    expect(page).to have_content(propanol.name)
+    expect(page).to have_content(acetone.name)
   end
 end

@@ -13,9 +13,13 @@
 </head>
 <h1>Welcome to Chemical Inventory</h1>
 <p>Below is a list of all the storage units available to you<p>
+<%= link_to "Sort by chemical count", sort: "chemical_count"%>
     <table>
     <tr>
       <th>Name</th>
+      <%# if params[:sort] == "chemical_count"%>
+        <!-- <tr>Chemical Count<tr> -->
+      <%# end %>
       <th>Create</th>
       <th>Edit</th>
       <th>Delete</th>
@@ -23,6 +27,9 @@
     <% @storage_units_sorted.each do |storage_unit| %>
       <tr>
         <td><%= link_to storage_unit.name, "/storage_units/#{storage_unit.id}"%></td>
+        <%# if params[:chemical_count] == "chemical_count"%>
+          <!-- <tr>storage_unit.chemical_count<tr> -->
+        <%# end %>
         <td><%= storage_unit.created_at %></td>
         <td><%= link_to "Edit #{storage_unit.name}", "/storage_units/#{storage_unit.id}/edit"%></td>
         <td><%= form_with url: "/storage_units/#{storage_unit.id}", method: :delete, local: true do |form|%>
