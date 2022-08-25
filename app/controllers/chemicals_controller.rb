@@ -1,6 +1,11 @@
 class ChemicalsController < ApplicationController
   def index
-    @chemicals = Chemical.all
+    @chemicals = 
+      if params[:all_flammable]
+        flammable_chemicals(Chemical.all)
+      else
+        Chemical.all
+      end
     @storage_units = StorageUnit.all
   end
 
