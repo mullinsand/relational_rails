@@ -14,12 +14,16 @@
 <h1>Welcome to Chemical Inventory</h1>
 <p>Below is a list of all the storage units available to you<p>
 <%= link_to "Sort by chemical count", sort: "chemical_count", method: :get%>
-<%= form_with url: "/storage_units/", method: :get, local: true do |form|%>
+<%= form_with method: :get, local: true do |form|%>
   <%= form.label :search_exact %>
   <%= form.text_field :search_exact %>
   <%= form.submit "Search (exact)" %>
 <% end%>
-
+<%= form_with method: :get, local: true do |form|%>
+  <%= form.label :search_partial %>
+  <%= form.text_field :search_partial %>
+  <%= form.submit "Search (partial)" %>
+<% end%>
     <table>
     <tr>
       <th>Name</th>
@@ -31,7 +35,7 @@
       <th>Delete</th>
     </tr>
     <% @storage_units_sorted.each do |storage_unit| %>
-      <tr>
+      <tr id="storage_unit_<%= storage_unit.id %>" >
         <td><%= link_to storage_unit.name, "/storage_units/#{storage_unit.id}"%></td>
         <% if params[:sort] == "chemical_count"%>
           <td><%= storage_unit.chemicals.count %> </td>

@@ -16,4 +16,7 @@ class StorageUnit < ApplicationRecord
     self.all.select { |storage_unit| storage_unit.name == search_name }
   end
   
+  def self.search_partial(search_name)
+    self.all.select { |storage_unit| storage_unit.name.include?(search_name) }
+  end
 end

@@ -5,6 +5,8 @@ class StorageUnitsController < ApplicationController
       StorageUnit.sort_by_chemicals
     elsif params[:search_exact]
       StorageUnit.search_exact(params[:search_exact])
+    elsif params[:search_partial]
+      StorageUnit.search_partial(params[:search_partial])
     else
       StorageUnit.sort_by_creation
     end

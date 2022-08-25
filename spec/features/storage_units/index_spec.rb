@@ -195,11 +195,27 @@ RSpec.describe 'Storage Unit index' do
 
     describe 'search by name (partial)' do
       it 'has text box to filter by keyword' do
+        visit "/storage_units/"
 
+        fill_in :search_partial, with: "lab"
+        click_button "Search (partial)"
       end
 
       it 'displays records that contain partial match on page when form is submitted' do
-        
+        lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
+        lab2 = StorageUnit.create!(name: 'lab2', size: 4.0, fireproof: false)
+        hallway = StorageUnit.create!(name: 'hallway', size: 1.5, fireproof: false)
+        basement = StorageUnit.create!(name: 'basement', size: 8.0, fireproof: true)
+
+        visit "/storage_units/"
+
+        fill_in :search_partial, with: "lab"
+        click_button "Search (partial)"
+
+        expect(page).to_not have_content(hallway.name)
+        expect(page).to have_content(lab1.name)
+        expect(page).to have_content(lab2.name)
+        expect(page).to_not have_content(basement.name)
       end
     end
   end
