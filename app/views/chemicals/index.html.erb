@@ -13,7 +13,7 @@
 </head>
 <h1>Welcome to Chemical Inventory</h1>
 <p>Below is a list of all the chemicals available<p>
-<%= link_to "List only flammable chemicals", :all_flammable => true %>
+<%# <%= link_to "List only flammable chemicals", :all_flammable => true %>
   <table>
     <tr>
       <th>Name</th>
@@ -26,18 +26,20 @@
       <th>Delete</th>
     </tr>
     <% @chemicals.each do |chemical| %>
-      <tr id="chemical_<%= chemical.id %>">
-        <td><%= link_to chemical.name, "/chemicals/#{chemical.id}"%></td>
-        <td><%= chemical.amount %></td>
-        <td><%= chemical.flammable %></td>
-        <td><%= link_to @storage_units.find(chemical.storage_unit_id).name, "/storage_units/#{chemical.storage_unit_id}" %></td>
-        <td><%= chemical.created_at %></td>
-        <td><%= chemical.updated_at %></td>
-        <td><%= link_to "Edit #{chemical.name}", "/chemicals/#{chemical.id}/edit" %></td>
-        <td><%= form_with url: "/chemicals/#{chemical.id}", method: :delete, local: true do |form|%>
-          <%= form.submit "Delete #{chemical.name}"%>
-        <%end%></td>
-      </tr>
+      <% if chemical.flammable %>
+        <tr id="chemical_<%= chemical.id %>">
+          <td><%= link_to chemical.name, "/chemicals/#{chemical.id}"%></td>
+          <td><%= chemical.amount %></td>
+          <td><%= chemical.flammable %></td>
+          <td><%= link_to @storage_units.find(chemical.storage_unit_id).name, "/storage_units/#{chemical.storage_unit_id}" %></td>
+          <td><%= chemical.created_at %></td>
+          <td><%= chemical.updated_at %></td>
+          <td><%= link_to "Edit #{chemical.name}", "/chemicals/#{chemical.id}/edit" %></td>
+          <td><%= form_with url: "/chemicals/#{chemical.id}", method: :delete, local: true do |form|%>
+            <%= form.submit "Delete #{chemical.name}"%>
+          <%end%></td>
+        </tr>
+      <% end %>
     <% end %>
   </table>
 <a href='chemicals/new'>Add new chemical</a><br>
