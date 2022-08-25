@@ -41,4 +41,24 @@ RSpec.describe 'Chemicals index' do
     click_link("Storage Unit Index")
     expect(current_path).to eq("/storage_units/")
   end
+
+  it 'has a link to edit chemical info on index page' do
+    lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
+    ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 3.00, flammable: true)
+    methanol = lab1.chemicals.create!(name: 'methanol', amount: 500.00, flammable: true, storage_unit_id: lab1.id)
+    propanol = lab1.chemicals.create!(name: 'propanol', amount: 2000.00, flammable: true, storage_unit_id: lab1.id)
+    acetone = lab1.chemicals.create!(name: 'acetone', amount: 20000.00, flammable: true, storage_unit_id: lab1.id)
+
+    visit "/chemicals"
+
+    expect(page).to have_link("Edit #{ethanol.name}")
+    click_link("Edit #{ethanol.name}")
+    expect(current_path).to eq("/chemicals/#{ethanol.id}/edit")
+
+    visit "/chemicals"
+    
+    expect(page).to have_link("Edit #{acetone.name}")
+    click_link("Edit #{acetone.name}")
+    expect(current_path).to eq("/chemicals/#{acetone.id}/edit")
+  end
 end
