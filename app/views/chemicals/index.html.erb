@@ -26,7 +26,7 @@
       <th>Delete</th>
     </tr>
     <% @chemicals.each do |chemical| %>
-      <tr>
+      <tr id="chemical_<%= chemical.id %>">
         <td><%= link_to chemical.name, "/chemicals/#{chemical.id}"%></td>
         <td><%= chemical.amount %></td>
         <td><%= chemical.flammable %></td>
