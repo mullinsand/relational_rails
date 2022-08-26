@@ -21,13 +21,15 @@ RSpec.describe 'Storage Unit index' do
       lab2 = StorageUnit.create!(name: 'lab2', size: 4.0, fireproof: false)
       hallway = StorageUnit.create!(name: 'hallway', size: 1.5, fireproof: false)
       basement = StorageUnit.create!(name: 'basement', size: 8.0, fireproof: true)
-
+      storage_units = [lab1, lab2, hallway, basement]
       visit "/storage_units"
 
-      expect(page).to have_content(lab1.name)
-      expect(page).to have_content(lab2.name)
-      expect(page).to have_content(hallway.name)
-      expect(page).to have_content(basement.name)
+      storage_units.each do |storage_unit|
+        within "#storage_unit_#{storage_unit.id}" do
+          expect(page).to have_content(storage_unit.name)
+          expect(page).to have_content(storage_unit.created_at)
+        end
+      end
     end
 
     it 'includes the timestamp of when each was created' do
@@ -45,6 +47,9 @@ RSpec.describe 'Storage Unit index' do
       expect(page).to have_content(lab2.created_at)
       expect(page).to have_content(hallway.created_at)
       expect(page).to have_content(basement.created_at)
+
+      expect(lab2.name).to appear_before(lab1.name)
+      expect(basement.name).to appear_before(hallway.name)
     end
 
     it 'has link to chemicals index' do
@@ -136,6 +141,84 @@ RSpec.describe 'Storage Unit index' do
       expect(page).to_not have_content(ethanol.name)
       expect(page).to_not have_content(methanol.name)
       expect(page).to_not have_content(propanol.name)
+    end
+
+    it 'has link to sort all storage units by number of chemicals' do
+      visit "/storage_units/"
+      expect(page).to have_link("Sort by chemical count")
+    end
+
+    it 'sorts all storage units by chemical count' do
+      lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
+      lab2 = StorageUnit.create!(name: 'lab2', size: 4.0, fireproof: false)
+      hallway = StorageUnit.create!(name: 'hallway', size: 1.5, fireproof: false)
+      basement = StorageUnit.create!(name: 'basement', size: 8.0, fireproof: true)
+
+
+      ethanol = lab2.chemicals.create!(name: 'ethanol', amount: 600.00, flammable: true)
+      methanol = lab2.chemicals.create!(name: 'methanol', amount: 500.00, flammable: true)
+      propanol = lab2.chemicals.create!(name: 'propanol', amount: 2000.00, flammable: true)
+      acetone = lab2.chemicals.create!(name: 'acetone', amount: 20000.00, flammable: true)
+      potassium_oxalate = basement.chemicals.create!(name: 'potassium_oxalate', amount: 45.00, flammable: false)
+
+      visit "/storage_units/"
+      click_link("Sort by chemical count")
+
+      expect(lab2.name).to appear_before(lab1.name)
+      expect(lab2.name).to appear_before(basement.name)
+      expect(basement.name).to appear_before(lab1.name)
+    end
+
+    describe 'search by name (exact)' do
+      it 'has text box to filter by keyword' do
+        visit "/storage_units/"
+
+        fill_in :search_exact, with: "hallway"
+        click_button "Search (exact)"
+      end
+
+      it 'displays records that contain exact match on page when form is submitted' do
+        lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
+        lab2 = StorageUnit.create!(name: 'lab2', size: 4.0, fireproof: false)
+        hallway = StorageUnit.create!(name: 'hallway', size: 1.5, fireproof: false)
+        basement = StorageUnit.create!(name: 'basement', size: 8.0, fireproof: true)
+
+        visit "/storage_units/"
+
+        fill_in :search_exact, with: "hallway"
+        click_button "Search (exact)"
+
+        expect(page).to have_content(hallway.name)
+        expect(page).to_not have_content(lab1.name)
+        expect(page).to_not have_content(lab2.name)
+        expect(page).to_not have_content(basement.name)
+      end
+    end
+
+    describe 'search by name (partial)' do
+      it 'has text box to filter by keyword' do
+        visit "/storage_units/"
+
+        fill_in :search_partial, with: "lab"
+        click_button "Search (partial)"
+      end
+
+      it 'displays records that contain partial match on page when form is submitted' do
+        lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
+        lab2 = StorageUnit.create!(name: 'lab2', size: 4.0, fireproof: false)
+        hallway = StorageUnit.create!(name: 'hallway', size: 1.5, fireproof: false)
+        basement = StorageUnit.create!(name: 'basement', size: 8.0, fireproof: true)
+
+        visit "/storage_units/"
+
+        fill_in :search_partial, with: "lab"
+        click_button "Search (partial)"
+
+        expect(page).to_not have_content(hallway.name)
+        expect(page).to have_content(lab1.name)
+        expect(page).to have_content(lab2.name)
+        expect(page).to_not have_content(basement.name)
+      end
     end
   end
 

@@ -15,7 +15,7 @@ RSpec.describe 'Chemicals index' do
     methanol = lab1.chemicals.create!(name: 'methanol', amount: 500.00, flammable: true)
     propanol = lab1.chemicals.create!(name: 'propanol', amount: 2000.00, flammable: true)
     acetone = lab1.chemicals.create!(name: 'acetone', amount: 20000.00, flammable: true)
-    potassium_oxalate = lab2.chemicals.create!(name: 'potassium_oxalate', amount: 45.00, flammable: false)
+    potassium_oxalate = lab2.chemicals.create!(name: 'potassium_oxalate', amount: 45.00, flammable: true)
   
 
     visit "/chemicals"
@@ -86,5 +86,30 @@ RSpec.describe 'Chemicals index' do
 
     expect(page).to_not have_content(ethanol.name)
     expect(page).to_not have_content(methanol.name)
+  end
+
+  it 'only shows all flammable chemicals' do
+    lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
+
+    ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 600.00, flammable: true, storage_unit_id: 1)
+    methanol = lab1.chemicals.create!(name: 'methanol', amount: 500.00, flammable: true, storage_unit_id: 1)
+    propanol = lab1.chemicals.create!(name: 'propanol', amount: 2000.00, flammable: false, storage_unit_id: 1)
+
+    visit "/chemicals"
+
+    expect(page).to have_content(ethanol.name)
+    expect(page).to have_content(methanol.name)
+    expect(page).to_not have_content(propanol.name)
+  end
+
+  it 'has link to add a new chemical' do
+    lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
+    ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 3.00, flammable: true)
+    
+    visit "/chemicals"
+
+    expect(page).to have_link("Add new chemical")
+    click_link("Add new chemical")
+    expect(current_path).to eq("/chemicals/new")
   end
 end

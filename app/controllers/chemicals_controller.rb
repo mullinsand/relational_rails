@@ -1,12 +1,22 @@
 class ChemicalsController < ApplicationController
   def index
-    @chemicals = Chemical.all
+    @chemicals = 
+      if params[:all_flammable]
+        Chemical.flammable_chemicals(Chemical.all)
+      else
+        Chemical.all
+      end
     @storage_units = StorageUnit.all
   end
 
   def new
     @storage_units = StorageUnit.all
-    @storage_unit_name = [StorageUnit.find(params[:id])[:name], StorageUnit.find(params[:id])[:id]]
+    @storage_unit_name = 
+    if params[:id]
+      [StorageUnit.find(params[:id])[:name], StorageUnit.find(params[:id])[:id]]
+    else
+      [StorageUnit.first[:name], StorageUnit.first[:id]]
+    end
   end
 
   def create

@@ -5,4 +5,18 @@ class StorageUnit < ApplicationRecord
       -storage_unit.created_at.to_i
     end
   end
+
+  def self.sort_by_chemicals
+    self.all.sort_by do |storage_unit|
+      -storage_unit.chemicals.count
+    end
+  end
+
+  def self.search_exact(search_name)
+    self.all.select { |storage_unit| storage_unit.name == search_name }
+  end
+  
+  def self.search_partial(search_name)
+    self.all.select { |storage_unit| storage_unit.name.include?(search_name) }
+  end
 end
