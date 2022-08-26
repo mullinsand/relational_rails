@@ -21,13 +21,15 @@ RSpec.describe 'Storage Unit index' do
       lab2 = StorageUnit.create!(name: 'lab2', size: 4.0, fireproof: false)
       hallway = StorageUnit.create!(name: 'hallway', size: 1.5, fireproof: false)
       basement = StorageUnit.create!(name: 'basement', size: 8.0, fireproof: true)
-
+      storage_units = [lab1, lab2, hallway, basement]
       visit "/storage_units"
 
-      expect(page).to have_content(lab1.name)
-      expect(page).to have_content(lab2.name)
-      expect(page).to have_content(hallway.name)
-      expect(page).to have_content(basement.name)
+      storage_units.each do |storage_unit|
+        within "#storage_unit_#{storage_unit.id}" do
+          expect(page).to have_content(storage_unit.name)
+          expect(page).to have_content(storage_unit.created_at)
+        end
+      end
     end
 
     it 'includes the timestamp of when each was created' do
