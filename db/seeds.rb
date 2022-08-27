@@ -5,6 +5,8 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+Chemical.destroy_all
+StorageUnit.destroy_all
 
 lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
 lab2 = StorageUnit.create!(name: 'lab2', size: 4.0, fireproof: false)

@@ -5,14 +5,11 @@ class StorageUnit < ApplicationRecord
   end
 
   def self.sort_by_chemicals
-    self.all.sort_by do |storage_unit|
-      -storage_unit.chemicals.count
-    end
-    # self.all.where()
+    self.select("storage_units.*, count(storage_unit_id) as chemical_count").left_joins(:chemicals).group(:id).order("chemical_count desc")
   end
 
   def self.threshold(storage_unit, threshold_amount)
-    storage_unit.chemicals.select { |chemical| chemical.amount > threshold_amount.to_f}
+    storage_unit.chemicals.where("amount > #{threshold_amount}")
   end
 
   def self.search_exact(search_name)
