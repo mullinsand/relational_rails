@@ -57,7 +57,7 @@ class ChemicalsController < ApplicationController
     redirect_to "/chemicals/#{params[:id]}"
   end
 
-  def destory
+  def destroy
     Chemical.destroy(params[:id])
     redirect_to '/chemicals'
   end

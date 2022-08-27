@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   get '/storage_units/:id', to: 'storage_units#show'
   get '/storage_units/:id/edit', to: 'storage_units#edit'
   patch '/storage_units/', to: 'storage_units#update'
-  delete '/storage_units/:id', to: 'storage_units#destory'
+  delete '/storage_units/:id', to: 'storage_units#destroy'
 
   get '/storage_units/:id/chemicals', to: 'storage_unit_chemicals#index'
   get '/storage_units/:id/chemicals/new', to: 'chemicals#new'
@@ -20,6 +20,6 @@ Rails.application.routes.draw do
   get '/chemicals/:id', to: 'chemicals#show'
   get '/chemicals/:id/edit', to: 'chemicals#edit'
   patch '/chemicals/', to: 'chemicals#update'
-  delete '/chemicals/:id', to: 'chemicals#destory'
+  delete '/chemicals/:id', to: 'chemicals#destroy'
 
 end

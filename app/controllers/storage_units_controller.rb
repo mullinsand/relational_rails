@@ -51,7 +51,7 @@ class StorageUnitsController < ApplicationController
     redirect_to "/storage_units/#{storage_unit.id}"
   end
 
-  def destory
+  def destroy
     StorageUnit.destroy(params[:id])
     redirect_to '/storage_units'
   end
