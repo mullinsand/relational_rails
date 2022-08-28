@@ -15,8 +15,8 @@ Rails.application.routes.draw do
   post '/storage_units/:id/chemicals/', to: 'chemicals#create'
 
   get '/chemicals', to: 'chemicals#index'
-  get '/chemicals/new', to: 'chemicals#new'
   post '/chemicals', to: 'chemicals#create'
+  get '/chemicals/new', to: 'chemicals#new'
   get '/chemicals/:id', to: 'chemicals#show'
   get '/chemicals/:id/edit', to: 'chemicals#edit'
   patch '/chemicals/', to: 'chemicals#update'

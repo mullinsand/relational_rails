@@ -1,5 +1,11 @@
 class StorageUnit < ApplicationRecord
   has_many :chemicals, dependent: :destroy
+
+  validates :name, presence: true
+  validates :size, presence: true
+  validates :fireproof, inclusion: [true, false]
+
+
   def self.sort_by_creation
     self.all.order(created_at: :desc)
   end
