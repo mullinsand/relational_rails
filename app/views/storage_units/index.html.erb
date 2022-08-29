@@ -38,7 +38,7 @@
       <tr id="storage_unit_<%= storage_unit.id %>" >
         <td><%= link_to storage_unit.name, "/storage_units/#{storage_unit.id}"%></td>
         <% if params[:sort] == "chemical_count"%>
-          <td><%= storage_unit.chemical_count ? storage_unit.chemical_count : 0 %> </td>
+          <td><%= storage_unit.chemical_count %> </td>
         <% end %>
         <td><%= storage_unit.created_at %></td>
         <td><%= link_to "Edit #{storage_unit.name}", "/storage_units/#{storage_unit.id}/edit"%></td>

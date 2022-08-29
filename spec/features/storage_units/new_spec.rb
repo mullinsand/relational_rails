@@ -10,7 +10,7 @@ RSpec.describe 'Storage_unit new' do
         fill_in('size', with: 5.0)
         choose('fireproof', with: true)
         click_button('Create Storage')
-        
+
         new_storage_unit_id = StorageUnit.last.id
         expect(current_path).to eq('/storage_units')
         expect(page).to have_content('lab3')
