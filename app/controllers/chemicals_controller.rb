@@ -22,10 +22,7 @@ class ChemicalsController < ApplicationController
     redirect_to "/storage_units/#{chemical.storage_unit_id}/chemicals"
   end
 
-  def chemical_params
-    params[:flammable] = to_boolean(params[:flammable])
-    params.permit(:name, :amount, :flammable, :storage_unit_id)
-  end
+
 
   def to_boolean(string)
     ActiveRecord::Type::Boolean.new.cast(string)
@@ -46,12 +43,7 @@ class ChemicalsController < ApplicationController
 
   def update
     chemical = Chemical.find(params[:id])
-    chemical.update({
-      name: params[:name],
-      amount: params[:amount],
-      flammable: params[:flammable] == "true" ? true : false,
-      storage_unit_id: params[:storage_unit_id]
-    })
+    chemical.update(chemical_params)
     chemical.save
     redirect_to "/chemicals/#{params[:id]}"
   end
@@ -59,5 +51,11 @@ class ChemicalsController < ApplicationController
   def destroy
     Chemical.destroy(params[:id])
     redirect_to '/chemicals'
+  end
+
+  private
+  def chemical_params
+    params[:flammable] = to_boolean(params[:flammable])
+    params.permit(:name, :amount, :flammable, :storage_unit_id)
   end
 end
