@@ -17,11 +17,7 @@ class StorageUnitsController < ApplicationController
   end
 
   def create
-    storage_unit = StorageUnit.new({
-      name: params[:name],
-      size: params[:size],
-      fireproof: params[:fireproof] == "true" ? true : false
-    })
+    storage_unit = StorageUnit.new(storage_unit_params)
 
     storage_unit.save
 
@@ -29,7 +25,12 @@ class StorageUnitsController < ApplicationController
   end
 
   def storage_unit_params
+    params[:fireproof] = to_boolean(params[:fireproof])
     params.permit(:name, :size, :fireproof)
+  end
+
+  def to_boolean(string)
+    ActiveRecord::Type::Boolean.new.cast(string)
   end
 
   def show
@@ -51,7 +52,7 @@ class StorageUnitsController < ApplicationController
     redirect_to "/storage_units/#{storage_unit.id}"
   end
 
-  def destory
+  def destroy
     StorageUnit.destroy(params[:id])
     redirect_to '/storage_units'
   end

@@ -1,22 +1,28 @@
 class StorageUnit < ApplicationRecord
   has_many :chemicals, dependent: :destroy
+
+  validates :name, presence: true
+  validates :size, presence: true
+  validates :fireproof, inclusion: [true, false]
+
+
   def self.sort_by_creation
-    self.all.sort_by do |storage_unit|
-      -storage_unit.created_at.to_i
-    end
+    self.all.order(created_at: :desc)
   end
 
   def self.sort_by_chemicals
-    self.all.sort_by do |storage_unit|
-      -storage_unit.chemicals.count
-    end
+    self.select("storage_units.*, count(storage_unit_id) as chemical_count").left_joins(:chemicals).group(:id).order("chemical_count desc")
+  end
+
+  def self.threshold(storage_unit, threshold_amount)
+    storage_unit.chemicals.where("amount > #{threshold_amount}")
   end
 
   def self.search_exact(search_name)
-    self.all.select { |storage_unit| storage_unit.name == search_name }
+    self.all.where(name: search_name)
   end
   
   def self.search_partial(search_name)
-    self.all.select { |storage_unit| storage_unit.name.include?(search_name) }
+    self.all.where("name ILIKE ?", "%#{search_name}%")
   end
 end
