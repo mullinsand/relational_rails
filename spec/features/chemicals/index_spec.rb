@@ -34,6 +34,7 @@ RSpec.describe 'Chemicals index' do
     click_link("Chemicals Index")
     expect(current_path).to eq("/chemicals/")
   end
+  
   it 'has link to storage units index' do
     visit "/chemicals"
 

@@ -14,7 +14,7 @@ RSpec.describe 'Chemical class' do
 
       chemicals = Chemical.all
 
-      expect(Chemical.flammable_chemicals(chemicals)).to eq([ethanol, methanol, propanol, acetone])
+      expect(Chemical.flammable_chemicals).to eq([ethanol, methanol, propanol, acetone])
     end
   end
 end

@@ -26,7 +26,6 @@
       <th>Delete</th>
     </tr>
     <% @chemicals.each do |chemical| %>
-      <% if chemical.flammable %>
         <tr id="chemical_<%= chemical.id %>">
           <td><%= link_to chemical.name, "/chemicals/#{chemical.id}"%></td>
           <td><%= chemical.amount %></td>
@@ -39,7 +38,6 @@
             <%= form.submit "Delete #{chemical.name}"%>
           <%end%></td>
         </tr>
-      <% end %>
     <% end %>
   </table>
 <%= link_to "Add new chemical", "/chemicals/new" %><br>
