@@ -27,7 +27,7 @@
     <td><%= @storage_unit.size %></td>
     <td><%= @storage_unit.fireproof %></td>
     <td><%= link_to "Chemicals", "/storage_units/#{@storage_unit.id}/chemicals"%></td>
-    <td><%= @storage_unit.chemicals.count %></td>
+    <td><%= @storage_unit.chemicals_count %></td>
     <td><%= @storage_unit.created_at %></td>
     <td><%= @storage_unit.updated_at %></td>
     <td><%= form_with url: "/storage_units/#{@storage_unit.id}", method: :delete, local: true do |form|%>

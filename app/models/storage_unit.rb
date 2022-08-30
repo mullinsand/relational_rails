@@ -11,7 +11,7 @@ class StorageUnit < ApplicationRecord
   end
 
   def self.sort_by_chemicals
-    self.select("storage_units.*, count(storage_unit_id) as chemical_count").left_joins(:chemicals).group(:id).order("chemical_count desc")
+    self.select("storage_units.*, coalesce(count(storage_unit_id), 0) as chemical_count").left_joins(:chemicals).group(:id).order("chemical_count desc")
   end
 
   def self.threshold(storage_unit, threshold_amount)
@@ -24,5 +24,9 @@ class StorageUnit < ApplicationRecord
   
   def self.search_partial(search_name)
     self.all.where("name ILIKE ?", "%#{search_name}%")
+  end
+
+  def chemicals_count
+    self.chemicals.count
   end
 end
