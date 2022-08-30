@@ -97,52 +97,47 @@ RSpec.describe 'Storage Unit chemicals index' do
       end
 
     end
+    describe 'US16: Sort Parents children in alpha order by name' do
+      it 'has a link to sort by alphabetical order' do
+        lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
+        lab2 = StorageUnit.create!(name: 'lab2', size: 4.0, fireproof: false)
+        ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 3.00, flammable: true)
+        methanol = lab1.chemicals.create!(name: 'methanol', amount: 500.00, flammable: true, storage_unit_id: lab1.id)
+        propanol = lab1.chemicals.create!(name: 'propanol', amount: 2000.00, flammable: true, storage_unit_id: lab1.id)
+        acetone = lab1.chemicals.create!(name: 'acetone', amount: 20000.00, flammable: true, storage_unit_id: lab1.id)
+        potassium_oxalate = lab2.chemicals.create!(name: 'potassium_oxalate', amount: 45.00, flammable: true)
 
-    it 'has link to add a new chemical' do
-      lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
-      ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 3.00, flammable: true)
-      
-      visit "/storage_units/#{lab1.id}/chemicals"
+        visit "/storage_units/#{lab1.id}/chemicals"
 
-      expect(page).to have_link("Add New Chemical to #{lab1.name}")
-      click_link("Add New Chemical to #{lab1.name}")
-      expect(current_path).to eq("/storage_units/#{lab1.id}/chemicals/new")
-    end
+        expect(page).to have_link("Sort in Alphabetical Order")
+      end
 
-    it 'has a link to sort by alphabetical order' do
-      lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
-      ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 3.00, flammable: true)
-      methanol = lab1.chemicals.create!(name: 'methanol', amount: 500.00, flammable: true, storage_unit_id: lab1.id)
-      propanol = lab1.chemicals.create!(name: 'propanol', amount: 2000.00, flammable: true, storage_unit_id: lab1.id)
-      acetone = lab1.chemicals.create!(name: 'acetone', amount: 20000.00, flammable: true, storage_unit_id: lab1.id)
+      it 'reloads page upon clicking alphabetical order link with chemicals in alpha order' do
+        lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
+        lab2 = StorageUnit.create!(name: 'lab2', size: 4.0, fireproof: false)
+        ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 3.00, flammable: true)
+        propanol = lab1.chemicals.create!(name: 'propanol', amount: 2000.00, flammable: true)
+        methanol = lab1.chemicals.create!(name: 'methanol', amount: 500.00, flammable: true)
+        acetone = lab1.chemicals.create!(name: 'acetone', amount: 20000.00, flammable: true)
+        potassium_oxalate = lab2.chemicals.create!(name: 'potassium_oxalate', amount: 45.00, flammable: true)
 
-      visit "/storage_units/#{lab1.id}/chemicals"
+        visit "/storage_units/#{lab1.id}/chemicals"
 
-      expect(page).to have_link("Sort in Alphabetical Order")
-    end
+        expect("ethanol").to appear_before("acetone", only_text: true)
+        expect("propanol").to appear_before("methanol")
+        click_link("Sort in Alphabetical Order")
 
-    it 'reloads page upon clicking alphabetical order link with chemicals in alpha order' do
-      lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
-      ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 3.00, flammable: true)
-      methanol = lab1.chemicals.create!(name: 'methanol', amount: 500.00, flammable: true, storage_unit_id: lab1.id)
-      propanol = lab1.chemicals.create!(name: 'propanol', amount: 2000.00, flammable: true, storage_unit_id: lab1.id)
-      acetone = lab1.chemicals.create!(name: 'acetone', amount: 20000.00, flammable: true, storage_unit_id: lab1.id)
-
-      visit "/storage_units/#{lab1.id}/chemicals"
-
-      expect("ethanol").to appear_before("acetone", only_text: true)
-
-      click_link("Sort in Alphabetical Order")
-
-      expect("acetone").to appear_before("ethanol", only_text: true)
+        expect("acetone").to appear_before("ethanol", only_text: true)
+        expect("methanol").to appear_before("propanol")
+      end
     end
 
     it 'has a link to edit chemical info on index page' do
       lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
       ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 3.00, flammable: true)
-      methanol = lab1.chemicals.create!(name: 'methanol', amount: 500.00, flammable: true, storage_unit_id: lab1.id)
-      propanol = lab1.chemicals.create!(name: 'propanol', amount: 2000.00, flammable: true, storage_unit_id: lab1.id)
-      acetone = lab1.chemicals.create!(name: 'acetone', amount: 20000.00, flammable: true, storage_unit_id: lab1.id)
+      methanol = lab1.chemicals.create!(name: 'methanol', amount: 500.00, flammable: true)
+      propanol = lab1.chemicals.create!(name: 'propanol', amount: 2000.00, flammable: true)
+      acetone = lab1.chemicals.create!(name: 'acetone', amount: 20000.00, flammable: true)
 
       visit "/storage_units/#{lab1.id}/chemicals"
 
@@ -160,9 +155,9 @@ RSpec.describe 'Storage Unit chemicals index' do
     it 'has a form to display chemicals with more than XX grams' do
       lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
       ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 3.00, flammable: true)
-      methanol = lab1.chemicals.create!(name: 'methanol', amount: 500.00, flammable: true, storage_unit_id: lab1.id)
-      propanol = lab1.chemicals.create!(name: 'propanol', amount: 2000.00, flammable: true, storage_unit_id: lab1.id)
-      acetone = lab1.chemicals.create!(name: 'acetone', amount: 20000.00, flammable: true, storage_unit_id: lab1.id)
+      methanol = lab1.chemicals.create!(name: 'methanol', amount: 500.00, flammable: true)
+      propanol = lab1.chemicals.create!(name: 'propanol', amount: 2000.00, flammable: true)
+      acetone = lab1.chemicals.create!(name: 'acetone', amount: 20000.00, flammable: true)
 
       visit "/storage_units/#{lab1.id}/chemicals"
 

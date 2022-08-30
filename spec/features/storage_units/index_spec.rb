@@ -95,32 +95,33 @@ RSpec.describe 'Storage Unit index' do
     end
 
 
+    describe 'US17: Parent update from parent index page' do
+      it 'has a link to edit storage unit info on index page' do
+        lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
+        lab2 = StorageUnit.create!(name: 'lab2', size: 4.0, fireproof: false)
+        hallway = StorageUnit.create!(name: 'hallway', size: 1.5, fireproof: false)
+        basement = StorageUnit.create!(name: 'basement', size: 8.0, fireproof: true)
+        storage_units = [lab1, lab2, hallway, basement]
 
-    it 'has a link to edit storage unit info on index page' do
-      lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
-      lab2 = StorageUnit.create!(name: 'lab2', size: 4.0, fireproof: false)
-      hallway = StorageUnit.create!(name: 'hallway', size: 1.5, fireproof: false)
-      basement = StorageUnit.create!(name: 'basement', size: 8.0, fireproof: true)
+        visit "/storage_units"
 
-      visit "/storage_units"
-
-      expect(page).to have_link("Edit #{lab1.name}")
-      click_link("Edit #{lab1.name}")
-      expect(current_path).to eq("/storage_units/#{lab1.id}/edit")
-
-      visit "/storage_units"
-      
-      expect(page).to have_link("Edit #{hallway.name}")
-      click_link("Edit #{hallway.name}")
-      expect(current_path).to eq("/storage_units/#{hallway.id}/edit")
+        storage_units.each do |storage_unit|
+          within "#storage_unit_#{storage_unit.id}" do
+            expect(page).to have_link("Edit #{storage_unit.name}")
+            click_link("Edit #{storage_unit.name}")
+            expect(current_path).to eq("/storage_units/#{storage_unit.id}/edit")
+            visit "/storage_units"
+          end
+        end
+      end
     end
 
     it 'can be deleted' do
       lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
   
-      ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 600.00, flammable: true, storage_unit_id: 1)
-      methanol = lab1.chemicals.create!(name: 'methanol', amount: 500.00, flammable: true, storage_unit_id: 1)
-      propanol = lab1.chemicals.create!(name: 'propanol', amount: 2000.00, flammable: true, storage_unit_id: 1)
+      ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 600.00, flammable: true)
+      methanol = lab1.chemicals.create!(name: 'methanol', amount: 500.00, flammable: true)
+      propanol = lab1.chemicals.create!(name: 'propanol', amount: 2000.00, flammable: true)
   
       visit "/storage_units"
       expect(page).to have_content(lab1.name)
@@ -137,9 +138,9 @@ RSpec.describe 'Storage Unit index' do
     it 'deletes all chemicals inside storage unit when storage unit is deleted' do
       lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
   
-      ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 600.00, flammable: true, storage_unit_id: 1)
-      methanol = lab1.chemicals.create!(name: 'methanol', amount: 500.00, flammable: true, storage_unit_id: 1)
-      propanol = lab1.chemicals.create!(name: 'propanol', amount: 2000.00, flammable: true, storage_unit_id: 1)
+      ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 600.00, flammable: true)
+      methanol = lab1.chemicals.create!(name: 'methanol', amount: 500.00, flammable: true)
+      propanol = lab1.chemicals.create!(name: 'propanol', amount: 2000.00, flammable: true)
   
       visit "/storage_units/"
       click_button("Delete #{lab1.name}")

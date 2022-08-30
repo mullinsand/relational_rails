@@ -52,25 +52,29 @@ RSpec.describe 'Chemicals index' do
       expect(current_path).to eq("/storage_units/")
     end
   end
+  
+  describe 'US18: Child Update from childs index page' do
+    it 'has a link to edit chemical info on index page' do
+      lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
+      lab2 = StorageUnit.create!(name: 'lab2', size: 4.0, fireproof: false)
+      ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 3.00, flammable: true)
+      propanol = lab1.chemicals.create!(name: 'propanol', amount: 2000.00, flammable: true, storage_unit_id: lab1.id)
+      methanol = lab1.chemicals.create!(name: 'methanol', amount: 500.00, flammable: true, storage_unit_id: lab1.id)
+      acetone = lab1.chemicals.create!(name: 'acetone', amount: 20000.00, flammable: true, storage_unit_id: lab1.id)
+      potassium_oxalate = lab2.chemicals.create!(name: 'potassium_oxalate', amount: 45.00, flammable: true)
+      chemicals = [ethanol, propanol, methanol, acetone, potassium_oxalate]
 
-  it 'has a link to edit chemical info on index page' do
-    lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
-    ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 3.00, flammable: true)
-    methanol = lab1.chemicals.create!(name: 'methanol', amount: 500.00, flammable: true, storage_unit_id: lab1.id)
-    propanol = lab1.chemicals.create!(name: 'propanol', amount: 2000.00, flammable: true, storage_unit_id: lab1.id)
-    acetone = lab1.chemicals.create!(name: 'acetone', amount: 20000.00, flammable: true, storage_unit_id: lab1.id)
+      visit "/chemicals"
 
-    visit "/chemicals"
-
-    expect(page).to have_link("Edit #{ethanol.name}")
-    click_link("Edit #{ethanol.name}")
-    expect(current_path).to eq("/chemicals/#{ethanol.id}/edit")
-
-    visit "/chemicals"
-    
-    expect(page).to have_link("Edit #{acetone.name}")
-    click_link("Edit #{acetone.name}")
-    expect(current_path).to eq("/chemicals/#{acetone.id}/edit")
+      chemicals.each do |chemical|
+        within "#chemical_#{chemical.id}" do
+          expect(page).to have_link("Edit #{chemical.name}")
+          click_link("Edit #{chemical.name}")
+          expect(current_path).to eq("/chemicals/#{chemical.id}/edit")
+          visit "/chemicals"
+        end
+      end
+    end
   end
 
   it 'can be deleted' do
@@ -99,19 +103,29 @@ RSpec.describe 'Chemicals index' do
     expect(page).to_not have_content(methanol.name)
   end
 
+  describe 'US15: child index only shows true boolean field' do
   it 'only shows all flammable chemicals' do
-    lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
+      lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
+      lab2 = StorageUnit.create!(name: 'lab2', size: 4.0, fireproof: false)
+      ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 600.00, flammable: true, storage_unit_id: 1)
+      methanol = lab1.chemicals.create!(name: 'methanol', amount: 500.00, flammable: true, storage_unit_id: 1)
+      propanol = lab1.chemicals.create!(name: 'propanol', amount: 2000.00, flammable: false, storage_unit_id: 1)
+      potassium_oxalate = lab2.chemicals.create!(name: 'potassium_oxalate', amount: 45.00, flammable: false)
+      acetone = lab2.chemicals.create!(name: 'acetone', amount: 645.00, flammable: true)
+      flammable_chemicals = [ethanol, methanol, acetone]
 
-    ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 600.00, flammable: true, storage_unit_id: 1)
-    methanol = lab1.chemicals.create!(name: 'methanol', amount: 500.00, flammable: true, storage_unit_id: 1)
-    propanol = lab1.chemicals.create!(name: 'propanol', amount: 2000.00, flammable: false, storage_unit_id: 1)
-
-    visit "/chemicals"
-
-    expect(page).to have_content(ethanol.name)
-    expect(page).to have_content(methanol.name)
-    expect(page).to_not have_content(propanol.name)
-  end
+      visit "/chemicals"
+      flammable_chemicals.each do |chemical|
+        within "#chemical_#{chemical.id}" do
+          expect(page).to have_content(chemical.name)
+          expect(page).to have_content(chemical.flammable)
+          expect(page).to have_content(chemical.amount)
+          expect(page).to have_content(chemical.updated_at)
+          expect(page).to have_content(chemical.created_at)
+        end
+      end
+    end
+  end 
 
   it 'has link to add a new chemical' do
     lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)

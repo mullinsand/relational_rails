@@ -82,12 +82,12 @@ RSpec.describe 'Storage Unit show' do
       expect(current_path).to eq("/storage_units/")
     end
   end
-  
+
   describe 'US10: When I visit show page, I see a link that takes me to that storage_units chemical list' do
     it 'has link to chemicals in that storage' do
       lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
 
-      ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 600.00, flammable: true, storage_unit_id: 1)
+      ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 600.00, flammable: true)
       
       visit "/storage_units/#{lab1.id}"
 
@@ -97,41 +97,50 @@ RSpec.describe 'Storage Unit show' do
       expect(current_path).to eq("/storage_units/#{lab1.id}/chemicals")
     end
   end
+  describe 'US19: Parent delete' do
+    it 'can be deleted' do
+      lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
+      lab2 = StorageUnit.create!(name: 'lab2', size: 4.0, fireproof: false)
+      hallway = StorageUnit.create!(name: 'hallway', size: 1.5, fireproof: false)
 
-  it 'can be deleted' do
-    lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
+      ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 600.00, flammable: true)
+      methanol = lab1.chemicals.create!(name: 'methanol', amount: 500.00, flammable: true)
+      propanol = lab1.chemicals.create!(name: 'propanol', amount: 2000.00, flammable: true)
 
-    ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 600.00, flammable: true, storage_unit_id: 1)
-    methanol = lab1.chemicals.create!(name: 'methanol', amount: 500.00, flammable: true, storage_unit_id: 1)
-    propanol = lab1.chemicals.create!(name: 'propanol', amount: 2000.00, flammable: true, storage_unit_id: 1)
+      visit "/storage_units/#{lab1.id}"
+      expect(page).to have_content(lab1.name)
 
-    visit "/storage_units/#{lab1.id}"
-    expect(page).to have_content(lab1.name)
+      expect(page).to have_button("Delete #{lab1.name}")
+      click_button("Delete #{lab1.name}")
+      expect(current_path).to eq("/storage_units")
 
-    expect(page).to have_button("Delete #{lab1.name}")
-    click_button("Delete #{lab1.name}")
-    expect(current_path).to eq("/storage_units")
+      visit "/storage_units"
 
-    visit "/storage_units"
+      expect(page).to_not have_content(lab1.name)
+      expect(page).to have_content(lab2.name)
 
-    expect(page).to_not have_content(lab1.name)
-  end
+    end
 
-  it 'deletes all chemicals inside storage unit when storage unit is deleted' do
-    lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
+    it 'deletes all chemicals inside storage unit when storage unit is deleted' do
+      lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
+      lab2 = StorageUnit.create!(name: 'lab2', size: 4.0, fireproof: false)
+      ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 3.00, flammable: true)
+      propanol = lab1.chemicals.create!(name: 'propanol', amount: 2000.00, flammable: true)
+      methanol = lab1.chemicals.create!(name: 'methanol', amount: 500.00, flammable: true)
+      acetone = lab1.chemicals.create!(name: 'acetone', amount: 20000.00, flammable: true)
+      potassium_oxalate = lab2.chemicals.create!(name: 'potassium_oxalate', amount: 45.00, flammable: true)
 
-    ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 600.00, flammable: true, storage_unit_id: 1)
-    methanol = lab1.chemicals.create!(name: 'methanol', amount: 500.00, flammable: true, storage_unit_id: 1)
-    propanol = lab1.chemicals.create!(name: 'propanol', amount: 2000.00, flammable: true, storage_unit_id: 1)
+      visit "/storage_units/#{lab1.id}"
+      click_button("Delete #{lab1.name}")
+      expect(current_path).to eq("/storage_units")
 
-    visit "/storage_units/#{lab1.id}"
-    click_button("Delete #{lab1.name}")
-    expect(current_path).to eq("/storage_units")
+      visit "/chemicals"
 
-    visit "/chemicals"
-
-    expect(page).to_not have_content(ethanol.name)
-    expect(page).to_not have_content(methanol.name)
-    expect(page).to_not have_content(propanol.name)
+      expect(page).to_not have_content(ethanol.name)
+      expect(page).to_not have_content(methanol.name)
+      expect(page).to_not have_content(propanol.name)
+      expect(page).to_not have_content(acetone.name)
+      expect(page).to have_content(potassium_oxalate.name)
+    end
   end
 end
