@@ -16,7 +16,6 @@ RSpec.describe 'Storage_unit edit' do
         visit "/storage_units/#{storage_unit.id}/edit"
 
         fill_in('name', with: 'lab4')
-        fill_in('size', with: 4.5)
         choose('fireproof', with: true)
 
         click_button('Edit storage unit')
@@ -26,7 +25,7 @@ RSpec.describe 'Storage_unit edit' do
         expect(current_path).to eq("/storage_units/#{storage_unit.id}")
         within "#storage_unit_#{storage_unit.id}" do
           expect(page).to have_content(edited_storage_unit.name)
-          expect(page).to have_content(edited_storage_unit.size)
+          expect(page).to have_content(storage_unit.size)
           expect(page).to have_content(edited_storage_unit.fireproof)
           expect(page).to have_content(edited_storage_unit.created_at)
           expect(page).to have_content(edited_storage_unit.updated_at)

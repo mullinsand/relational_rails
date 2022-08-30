@@ -28,9 +28,6 @@ RSpec.describe 'Storage_unit new' do
 
         within "#storage_unit_#{new_storage_unit.id}" do
           expect(page).to have_content(new_storage_unit.name)
-          expect(page).to have_content(new_storage_unit.fireproof)
-          expect(page).to have_content(new_storage_unit.amount)
-          expect(page).to have_content(new_storage_unit.updated_at)
           expect(page).to have_content(new_storage_unit.created_at)
         end
       end
