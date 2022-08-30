@@ -97,6 +97,7 @@ RSpec.describe 'Storage Unit chemicals index' do
       end
 
     end
+
     describe 'US16: Sort Parents children in alpha order by name' do
       it 'has a link to sort by alphabetical order' do
         lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
@@ -152,23 +153,42 @@ RSpec.describe 'Storage Unit chemicals index' do
       expect(current_path).to eq("/chemicals/#{acetone.id}/edit")
     end
 
-    it 'has a form to display chemicals with more than XX grams' do
-      lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
-      ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 3.00, flammable: true)
-      methanol = lab1.chemicals.create!(name: 'methanol', amount: 500.00, flammable: true)
-      propanol = lab1.chemicals.create!(name: 'propanol', amount: 2000.00, flammable: true)
-      acetone = lab1.chemicals.create!(name: 'acetone', amount: 20000.00, flammable: true)
+    describe 'US 21: Display records over a given threshold' do
+      it 'has a form to display chemicals with more than XX grams' do
+        lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
+        ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 3.00, flammable: true)
+        methanol = lab1.chemicals.create!(name: 'methanol', amount: 500.00, flammable: true)
+        propanol = lab1.chemicals.create!(name: 'propanol', amount: 2000.00, flammable: true)
+        acetone = lab1.chemicals.create!(name: 'acetone', amount: 20000.00, flammable: true)
 
-      visit "/storage_units/#{lab1.id}/chemicals"
+        visit "/storage_units/#{lab1.id}/chemicals"
 
-      fill_in(:threshold_search, with: 750)
-      click_button("Only returns chemicals with more than this amount in grams")
+        fill_in(:threshold_search, with: 750)
+        click_button("Only returns chemicals with more than this amount in grams")
 
-      expect(current_path).to eq("/storage_units/#{lab1.id}/chemicals")
-      expect(page).to_not have_content(methanol.name)
-      expect(page).to_not have_content(ethanol.name)
-      expect(page).to have_content(propanol.name)
-      expect(page).to have_content(acetone.name)
+        expect(current_path).to eq("/storage_units/#{lab1.id}/chemicals")
+      end
+
+      it 'after clicking submit button, only returns records with more than XX grams' do
+        lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
+        lab2 = StorageUnit.create!(name: 'lab2', size: 4.0, fireproof: false)
+        ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 3.00, flammable: true)
+        methanol = lab1.chemicals.create!(name: 'methanol', amount: 750.00, flammable: true)
+        propanol = lab1.chemicals.create!(name: 'propanol', amount: 2000.00, flammable: true)
+        acetone = lab1.chemicals.create!(name: 'acetone', amount: 20000.00, flammable: true)
+        potassium_oxalate = lab2.chemicals.create!(name: 'potassium_oxalate', amount: 45.00, flammable: true)
+
+        visit "/storage_units/#{lab1.id}/chemicals"
+
+        fill_in(:threshold_search, with: 750)
+        click_button("Only returns chemicals with more than this amount in grams")
+
+        expect(current_path).to eq("/storage_units/#{lab1.id}/chemicals")
+        expect(page).to_not have_content(methanol.name)
+        expect(page).to_not have_content(ethanol.name)
+        expect(page).to have_content(propanol.name)
+        expect(page).to have_content(acetone.name)
+      end
     end
   end
 end

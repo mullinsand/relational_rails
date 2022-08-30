@@ -74,6 +74,7 @@ RSpec.describe 'Storage Unit index' do
         expect(lab3.name).to appear_before(basement.name)
       end
     end
+
     describe 'US8 and US9: When I visit show page, I see links to chemical index and storage index' do
       it 'has link to chemicals index' do
  
@@ -116,70 +117,58 @@ RSpec.describe 'Storage Unit index' do
       end
     end
 
-    it 'can be deleted' do
-      lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
-  
-      ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 600.00, flammable: true)
-      methanol = lab1.chemicals.create!(name: 'methanol', amount: 500.00, flammable: true)
-      propanol = lab1.chemicals.create!(name: 'propanol', amount: 2000.00, flammable: true)
-  
-      visit "/storage_units"
-      expect(page).to have_content(lab1.name)
-  
-      expect(page).to have_button("Delete #{lab1.name}")
-      click_button("Delete #{lab1.name}")
-      expect(current_path).to eq("/storage_units")
-  
-      visit "/storage_units"
-  
-      expect(page).to_not have_content(lab1.name)
+    describe 'US19: Parent delete from Parent Index page' do
+      it 'can be deleted' do
+        lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
+        lab2 = StorageUnit.create!(name: 'lab2', size: 4.0, fireproof: false)
+        hallway = StorageUnit.create!(name: 'hallway', size: 1.5, fireproof: false)
+
+        ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 600.00, flammable: true)
+        methanol = lab1.chemicals.create!(name: 'methanol', amount: 500.00, flammable: true)
+        propanol = lab2.chemicals.create!(name: 'propanol', amount: 2000.00, flammable: true)
+        storage_units = [lab1, lab2, hallway]
+        visit "/storage_units/"
+        storage_units.each do |storage_unit|
+          within "#storage_unit_#{storage_unit.id}" do
+            expect(page).to have_content(storage_unit.name)
+            expect(page).to have_button("Delete #{storage_unit.name}")
+            click_button("Delete #{storage_unit.name}")
+            expect(current_path).to eq("/storage_units")
+          end
+          expect(page).to_not have_content(storage_unit.name)
+        end
+      end
     end
   
-    it 'deletes all chemicals inside storage unit when storage unit is deleted' do
-      lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
-  
-      ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 600.00, flammable: true)
-      methanol = lab1.chemicals.create!(name: 'methanol', amount: 500.00, flammable: true)
-      propanol = lab1.chemicals.create!(name: 'propanol', amount: 2000.00, flammable: true)
-  
-      visit "/storage_units/"
-      click_button("Delete #{lab1.name}")
-      expect(current_path).to eq("/storage_units")
-  
-      visit "/chemicals"
-  
-      expect(page).to_not have_content(ethanol.name)
-      expect(page).to_not have_content(methanol.name)
-      expect(page).to_not have_content(propanol.name)
+    describe 'EX1: Sort Parents by Number of Children' do
+      it 'has link to sort all storage units by number of chemicals' do
+        visit "/storage_units/"
+        expect(page).to have_link("Sort by chemical count")
+      end
+
+      it 'sorts all storage units by chemical count' do
+        lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
+        lab2 = StorageUnit.create!(name: 'lab2', size: 4.0, fireproof: false)
+        hallway = StorageUnit.create!(name: 'hallway', size: 1.5, fireproof: false)
+        basement = StorageUnit.create!(name: 'basement', size: 8.0, fireproof: true)
+
+
+        ethanol = lab2.chemicals.create!(name: 'ethanol', amount: 600.00, flammable: true)
+        methanol = lab2.chemicals.create!(name: 'methanol', amount: 500.00, flammable: true)
+        propanol = lab2.chemicals.create!(name: 'propanol', amount: 2000.00, flammable: true)
+        acetone = lab2.chemicals.create!(name: 'acetone', amount: 20000.00, flammable: true)
+        potassium_oxalate = basement.chemicals.create!(name: 'potassium_oxalate', amount: 45.00, flammable: false)
+
+        visit "/storage_units/"
+        click_link("Sort by chemical count")
+
+        expect(lab2.name).to appear_before(lab1.name)
+        expect(lab2.name).to appear_before(basement.name)
+        expect(basement.name).to appear_before(lab1.name)
+      end
     end
 
-    it 'has link to sort all storage units by number of chemicals' do
-      visit "/storage_units/"
-      expect(page).to have_link("Sort by chemical count")
-    end
-
-    it 'sorts all storage units by chemical count' do
-      lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
-      lab2 = StorageUnit.create!(name: 'lab2', size: 4.0, fireproof: false)
-      hallway = StorageUnit.create!(name: 'hallway', size: 1.5, fireproof: false)
-      basement = StorageUnit.create!(name: 'basement', size: 8.0, fireproof: true)
-
-
-      ethanol = lab2.chemicals.create!(name: 'ethanol', amount: 600.00, flammable: true)
-      methanol = lab2.chemicals.create!(name: 'methanol', amount: 500.00, flammable: true)
-      propanol = lab2.chemicals.create!(name: 'propanol', amount: 2000.00, flammable: true)
-      acetone = lab2.chemicals.create!(name: 'acetone', amount: 20000.00, flammable: true)
-      potassium_oxalate = basement.chemicals.create!(name: 'potassium_oxalate', amount: 45.00, flammable: false)
-
-      visit "/storage_units/"
-      click_link("Sort by chemical count")
-
-      expect(lab2.name).to appear_before(lab1.name)
-      expect(lab2.name).to appear_before(basement.name)
-      expect(basement.name).to appear_before(lab1.name)
-    end
-
-    describe 'search by name (exact)' do
+    describe ' EX2: search by name (exact)' do
       it 'has text box to filter by keyword' do
         visit "/storage_units/"
 
@@ -203,9 +192,24 @@ RSpec.describe 'Storage Unit index' do
         expect(page).to_not have_content(lab2.name)
         expect(page).to_not have_content(basement.name)
       end
+
+      it 'differentiates between lab1 and lab2' do
+        lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
+        lab2 = StorageUnit.create!(name: 'lab2', size: 4.0, fireproof: false)
+        hallway = StorageUnit.create!(name: 'hallway', size: 1.5, fireproof: false)
+        basement = StorageUnit.create!(name: 'basement', size: 8.0, fireproof: true)
+
+        visit "/storage_units/"
+
+        fill_in :search_exact, with: "lab1"
+        click_button "Search (exact)"
+
+        expect(page).to have_content(lab1.name)
+        expect(page).to_not have_content(lab2.name)
+      end
     end
 
-    describe 'search by name (partial)' do
+    describe 'EX3: search by name (partial)' do
       it 'has text box to filter by keyword' do
         visit "/storage_units/"
 
@@ -229,8 +233,23 @@ RSpec.describe 'Storage Unit index' do
         expect(page).to have_content(lab2.name)
         expect(page).to_not have_content(basement.name)
       end
+
+      it 'only needs a single letter' do
+        lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
+        lab2 = StorageUnit.create!(name: 'lab2', size: 4.0, fireproof: false)
+        hallway = StorageUnit.create!(name: 'hallway', size: 1.5, fireproof: false)
+        basement = StorageUnit.create!(name: 'basement', size: 8.0, fireproof: true)
+
+        visit "/storage_units/"
+
+        fill_in :search_partial, with: "b"
+        click_button "Search (partial)"
+
+        expect(page).to_not have_content(hallway.name)
+        expect(page).to have_content(lab1.name)
+        expect(page).to have_content(lab2.name)
+        expect(page).to have_content(basement.name)
+      end
     end
   end
-
-
 end

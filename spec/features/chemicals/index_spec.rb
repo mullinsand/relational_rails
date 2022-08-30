@@ -77,34 +77,32 @@ RSpec.describe 'Chemicals index' do
     end
   end
 
-  it 'can be deleted' do
-    lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
+  describe 'US23: Child Delete from Childs index page' do
+    it 'can be deleted' do
+      lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
+      lab2 = StorageUnit.create!(name: 'lab2', size: 4.0, fireproof: false)
+      hallway = StorageUnit.create!(name: 'hallway', size: 1.5, fireproof: false)
 
-    ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 600.00, flammable: true, storage_unit_id: 1)
-    methanol = lab1.chemicals.create!(name: 'methanol', amount: 500.00, flammable: true, storage_unit_id: 1)
-    propanol = lab1.chemicals.create!(name: 'propanol', amount: 2000.00, flammable: true, storage_unit_id: 1)
+      ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 600.00, flammable: true)
+      acetone = lab1.chemicals.create!(name: 'acetone', amount: 500.00, flammable: true)
+      propanol = lab2.chemicals.create!(name: 'propanol', amount: 2000.00, flammable: true)
 
-    visit "/chemicals"
-    expect(page).to have_content(ethanol.name)
-
-    expect(page).to have_button("Delete #{ethanol.name}")
-    click_button("Delete #{ethanol.name}")
-    expect(current_path).to eq("/chemicals")
-
-    visit "/chemicals"
-
-    expect(page).to have_button("Delete #{methanol.name}")
-    click_button("Delete #{methanol.name}")
-    expect(current_path).to eq("/chemicals")
-
-    visit "/chemicals"
-
-    expect(page).to_not have_content(ethanol.name)
-    expect(page).to_not have_content(methanol.name)
+      chemicals = [ethanol, acetone, propanol]
+      visit "/chemicals/"
+      chemicals.each do |chemical|
+        within "#chemical_#{chemical.id}" do
+          expect(page).to have_content(chemical.name)
+          expect(page).to have_button("Delete #{chemical.name}")
+          click_button("Delete #{chemical.name}")
+          expect(current_path).to eq("/chemicals")
+        end
+        expect(page).to_not have_content(chemical.name)
+      end
+    end
   end
 
   describe 'US15: child index only shows true boolean field' do
-  it 'only shows all flammable chemicals' do
+    it 'only shows all flammable chemicals' do
       lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
       lab2 = StorageUnit.create!(name: 'lab2', size: 4.0, fireproof: false)
       ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 600.00, flammable: true, storage_unit_id: 1)
