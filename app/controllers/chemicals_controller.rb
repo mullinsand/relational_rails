@@ -5,7 +5,7 @@ class ChemicalsController < ApplicationController
   end
 
   def new
-    @storage_units = StorageUnit.all
+    @storage_unit_options_array = StorageUnit.build_options_array
     @storage_unit_name = 
     if params[:id]
       [StorageUnit.find(params[:id])[:name], StorageUnit.find(params[:id])[:id]]
