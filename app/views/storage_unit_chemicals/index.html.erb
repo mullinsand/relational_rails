@@ -1,5 +1,3 @@
-<%= render "partials/menu" %>
-
 <head>
 <style>
   table, th, td {
@@ -19,6 +17,7 @@
     <%= form.text_field :threshold_search %>
     <%= form.submit "Only returns chemicals with more than this amount in grams"%>
   <% end %>
+  <%= render "partials/search_forms"%>
 <table>
     <tr>
       <th>Name</th>

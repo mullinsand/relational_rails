@@ -1,0 +1,10 @@
+<%= form_with method: :get, local: true do |form|%>
+  <%= form.label :search_exact %>
+  <%= form.text_field :search_exact %>
+  <%= form.submit "Search (exact)" %>
+<% end%>
+<%= form_with method: :get, local: true do |form|%>
+  <%= form.label :search_partial %>
+  <%= form.text_field :search_partial %>
+  <%= form.submit "Search (partial)" %>
+<% end%>

@@ -1,4 +1,3 @@
-<%= render "partials/menu" %>
 <%= form_with url: '/chemicals', method: :patch, local: true do |form| %>
   <%= form.hidden_field :id, value: @chemical[:id] %>
   <%= form.label :name %>
@@ -11,7 +10,7 @@
   <%= form.label :flammable_false, "Chemical is not flammable"%><br>
   <%= form.label :storage_unit_id, "Storage Unit"%><br>
   <%= form.select :storage_unit_id,
-                  @all_units,
+                  @storage_unit_options_array,
                   selected: @storage_unit_name,
                   :prompt => "Select Storage Unit"%><br>
   <%= form.submit 'Edit Chemical' %>
