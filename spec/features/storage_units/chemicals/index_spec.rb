@@ -1,9 +1,3 @@
-# User Story 5, Parent Children Index 
-
-# As a visitor
-# When I visit '/parents/:parent_id/child_table_name'
-# Then I see each Child that is associated with that Parent with each Child's attributes:
-
 require 'rails_helper'
 
 RSpec.describe 'Storage Unit chemicals index' do
@@ -189,6 +183,68 @@ RSpec.describe 'Storage Unit chemicals index' do
         expect(page).to have_content(propanol.name)
         expect(page).to have_content(acetone.name)
       end
+    end
+  end
+
+  describe ' EX2: search by name (exact)' do
+    it 'has text box to filter by keyword' do
+      lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
+      visit "/storage_units/#{lab1.id}/chemicals"
+
+      fill_in :search_exact, with: "ethanol"
+      click_button "Search (exact)"
+    end
+
+    it 'displays records that contain exact match on page when form is submitted' do
+      lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
+      lab2 = StorageUnit.create!(name: 'lab2', size: 4.0, fireproof: false)
+      ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 600.00, flammable: true, storage_unit_id: 1)
+      methanol = lab1.chemicals.create!(name: 'methanol', amount: 500.00, flammable: true, storage_unit_id: 1)
+      propanol = lab1.chemicals.create!(name: 'propanol', amount: 2000.00, flammable: false, storage_unit_id: 1)
+      potassium_oxalate = lab2.chemicals.create!(name: 'potassium_oxalate', amount: 45.00, flammable: false)
+      acetone = lab2.chemicals.create!(name: 'acetone', amount: 645.00, flammable: true)
+
+      visit "/storage_units/#{lab1.id}/chemicals"
+
+      fill_in :search_exact, with: "ethanol"
+      click_button "Search (exact)"
+
+      expect(page).to have_content(ethanol.name)
+      expect(page).to_not have_content(methanol.name)
+      expect(page).to_not have_content(propanol.name)
+      expect(page).to_not have_content(potassium_oxalate.name)
+      expect(page).to_not have_content(acetone.name)
+    end
+  end
+
+  describe 'EX3: search by name (partial)' do
+    it 'has text box to filter by keyword' do
+      lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
+      visit "/storage_units/#{lab1.id}/chemicals"
+
+      fill_in :search_partial, with: "ethanol"
+      click_button "Search (partial)"
+    end
+
+    it 'displays records that contain partial match on page when form is submitted' do
+      lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
+      lab2 = StorageUnit.create!(name: 'lab2', size: 4.0, fireproof: false)
+      ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 600.00, flammable: true, storage_unit_id: 1)
+      methanol = lab1.chemicals.create!(name: 'methanol', amount: 500.00, flammable: true, storage_unit_id: 1)
+      propanol = lab1.chemicals.create!(name: 'propanol', amount: 2000.00, flammable: false, storage_unit_id: 1)
+      potassium_oxalate = lab2.chemicals.create!(name: 'potassium_oxalate', amount: 45.00, flammable: false)
+      acetone = lab2.chemicals.create!(name: 'acetone', amount: 645.00, flammable: true)
+
+      visit "/storage_units/#{lab1.id}/chemicals"
+
+      fill_in :search_partial, with: "ethanol"
+      click_button "Search (partial)"
+
+      expect(page).to_not have_content(propanol.name)
+      expect(page).to have_content(ethanol.name)
+      expect(page).to have_content(methanol.name)
+      expect(page).to_not have_content(potassium_oxalate.name)
+      expect(page).to_not have_content(acetone.name)
     end
   end
 end
