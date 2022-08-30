@@ -1,17 +1,24 @@
 class ChemicalsController < ApplicationController
   def index
-    @chemicals = Chemical.flammable_chemicals
+    @chemicals = 
+      if params[:search_exact]
+        Chemical.flammable_chemicals.search_exact(params[:search_exact])
+      elsif params[:search_partial]
+        Chemical.flammable_chemicals.search_partial(params[:search_partial])
+      else
+        Chemical.flammable_chemicals
+      end
     @storage_units = StorageUnit.all
   end
 
   def new
-    @storage_units = StorageUnit.all
+    @storage_unit_options_array = StorageUnit.build_options_array
     @storage_unit_name = 
-    if params[:id]
-      [StorageUnit.find(params[:id])[:name], StorageUnit.find(params[:id])[:id]]
-    else
-      [StorageUnit.first[:name], StorageUnit.first[:id]]
-    end
+      if params[:id]
+        [StorageUnit.find(params[:id])[:name], StorageUnit.find(params[:id])[:id]]
+      else
+        [StorageUnit.first[:name], StorageUnit.first[:id]]
+      end
   end
 
   def create
@@ -21,12 +28,6 @@ class ChemicalsController < ApplicationController
 
     redirect_to "/storage_units/#{chemical.storage_unit_id}/chemicals"
   end
-
-
-
-  def to_boolean(string)
-    ActiveRecord::Type::Boolean.new.cast(string)
-  end
   
   def show
     @storage_units = StorageUnit.all
@@ -35,7 +36,7 @@ class ChemicalsController < ApplicationController
 
   def edit
 
-    @all_units = StorageUnit.all.map(&:name).zip(StorageUnit.all.map(&:id))
+    @storage_unit_options_array = StorageUnit.build_options_array
     @chemical = Chemical.find(params[:id])
     @storage_unit_name = [StorageUnit.find(@chemical[:storage_unit_id])[:name], StorageUnit.find(@chemical[:storage_unit_id])[:id]]
 

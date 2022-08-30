@@ -1,4 +1,3 @@
-<%= render "partials/menu" %>
 <head>
 <style>
   table, th, td {
@@ -22,7 +21,7 @@
     <th>Last updated</th>
     <th>Delete</th>
   </tr>
-  <tr>
+  <tr id="storage_unit_<%= @storage_unit.id %>">
     <td><%= @storage_unit.name %></td>
     <td><%= @storage_unit.size %></td>
     <td><%= @storage_unit.fireproof %></td>

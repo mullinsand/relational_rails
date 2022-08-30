@@ -1,4 +1,3 @@
-<%= render "partials/menu" %>
 <head>
 <style>
   table, th, td {
@@ -21,7 +20,7 @@
     <th>Last updated</th>
     <th>Delete</th>
   </tr>
-  <tr>
+  <tr id="chemical_<%= @chemical.id %>">
     <td><%= @chemical.name %></td>
     <td><%= @chemical.amount %></td>
     <td><%= @chemical.flammable %></td>

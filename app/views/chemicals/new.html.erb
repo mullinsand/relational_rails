@@ -1,4 +1,3 @@
-<%= render "partials/menu" %>
 <%= form_with url: '/chemicals', method: :post, local: true do |form| %>
   <%= form.label :name %>
   <%= form.text_field :name %> <br>
@@ -9,9 +8,8 @@
   <%= form.radio_button :flammable, false %>
   <%= form.label :flammable_false, "Chemical is not flammable"%><br>
   <%= form.label :storage_unit_id, "Storage Unit"%><br>
-  <% all_units = @storage_units.map(&:name).zip(@storage_units.map(&:id)) %>
   <%= form.select :storage_unit_id,
-                  all_units,
+                  @storage_unit_options_array,
                   selected: @storage_unit_name,
                   :prompt => "Select Storage Unit"%>
   <%= form.submit 'Create Chemical' %>
