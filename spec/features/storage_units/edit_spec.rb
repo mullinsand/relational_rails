@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Storage_unit edit' do
-  describe 'form for creating edit storage unit record' do
+  describe 'US12: form for creating edit storage unit record' do
     describe 'as a user' do
       it 'links to the edit page' do
         storage_unit = StorageUnit.create(name: "lab3", size: 5.0, fireproof: false)
@@ -16,16 +16,21 @@ RSpec.describe 'Storage_unit edit' do
         visit "/storage_units/#{storage_unit.id}/edit"
 
         fill_in('name', with: 'lab4')
-        # fill_in('size', with: 4.5)
-        choose('fireproof', with: false)
+        fill_in('size', with: 4.5)
+        choose('fireproof', with: true)
 
         click_button('Edit storage unit')
         
+        edited_storage_unit = StorageUnit.find(storage_unit.id)
 
         expect(current_path).to eq("/storage_units/#{storage_unit.id}")
-        expect(page).to have_content('lab4')
-        expect(page).to have_content(5.0)
-        expect(page).to have_content(false)
+        within "#storage_unit_#{storage_unit.id}" do
+          expect(page).to have_content(edited_storage_unit.name)
+          expect(page).to have_content(edited_storage_unit.size)
+          expect(page).to have_content(edited_storage_unit.fireproof)
+          expect(page).to have_content(edited_storage_unit.created_at)
+          expect(page).to have_content(edited_storage_unit.updated_at)
+        end
       end
     end
   end

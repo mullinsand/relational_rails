@@ -24,12 +24,6 @@ class StorageUnitsController < ApplicationController
     redirect_to '/storage_units'
   end
 
-
-
-  def to_boolean(string)
-    ActiveRecord::Type::Boolean.new.cast(string)
-  end
-
   def show
     @storage_unit = StorageUnit.find(params[:id])
   end

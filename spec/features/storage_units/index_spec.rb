@@ -16,76 +16,85 @@ require 'rails_helper'
 
 RSpec.describe 'Storage Unit index' do
   describe 'as a user' do
-    it 'lists all of the names of each storage unit' do
-      lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
-      lab2 = StorageUnit.create!(name: 'lab2', size: 4.0, fireproof: false)
-      hallway = StorageUnit.create!(name: 'hallway', size: 1.5, fireproof: false)
-      basement = StorageUnit.create!(name: 'basement', size: 8.0, fireproof: true)
-      storage_units = [lab1, lab2, hallway, basement]
-      visit "/storage_units"
+    describe 'US1: when I visit /storage_units, I see the name of each parent record' do
+      it 'lists all of the names of each storage unit' do
+        lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
+        lab2 = StorageUnit.create!(name: 'lab2', size: 4.0, fireproof: false)
+        hallway = StorageUnit.create!(name: 'hallway', size: 1.5, fireproof: false)
+        basement = StorageUnit.create!(name: 'basement', size: 8.0, fireproof: true)
+        storage_units = [lab1, lab2, hallway, basement]
+        visit "/storage_units"
 
-      storage_units.each do |storage_unit|
-        within "#storage_unit_#{storage_unit.id}" do
-          expect(page).to have_content(storage_unit.name)
-          expect(page).to have_content(storage_unit.created_at)
+        storage_units.each do |storage_unit|
+          within "#storage_unit_#{storage_unit.id}" do
+            expect(page).to have_content(storage_unit.name)
+          end
         end
+      end 
+    end
+
+    describe 'US6: when I visit /storage_units' do
+      it 'includes the timestamp of when each was created' do
+        lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
+        sleep(1)
+        lab2 = StorageUnit.create!(name: 'lab2', size: 4.0, fireproof: false)
+        sleep(1)
+        hallway = StorageUnit.create!(name: 'hallway', size: 1.5, fireproof: false)
+        sleep(1)
+        basement = StorageUnit.create!(name: 'basement', size: 8.0, fireproof: true)
+        storage_units = [lab1, lab2, hallway, basement]
+        visit "/storage_units"
+
+        storage_units.each do |storage_unit|
+          within "#storage_unit_#{storage_unit.id}" do
+            expect(page).to have_content(storage_unit.created_at)
+          end
+        end
+      end
+
+      it 'sorts the records with most recent appearing first' do
+        lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
+        sleep(1)
+        lab2 = StorageUnit.create!(name: 'lab2', size: 4.0, fireproof: false)
+        sleep(1)
+        hallway = StorageUnit.create!(name: 'hallway', size: 1.5, fireproof: false)
+        sleep(1)
+        basement = StorageUnit.create!(name: 'basement', size: 8.0, fireproof: true)
+        storage_units = [lab1, lab2, hallway, basement]
+
+        visit "/storage_units"
+
+        expect(lab2.name).to appear_before(lab1.name)
+        expect(basement.name).to appear_before(hallway.name)
+
+        lab3 = StorageUnit.create!(name: 'lab3', size: 2.0, fireproof: true)
+
+        visit "/storage_units"
+
+        expect(lab3.name).to appear_before(basement.name)
+      end
+    end
+    describe 'US8 and US9: When I visit show page, I see links to chemical index and storage index' do
+      it 'has link to chemicals index' do
+ 
+        visit "/storage_units"
+    
+        expect(page).to have_link("Chemicals Index")
+        click_link("Chemicals Index")
+        expect(current_path).to eq("/chemicals/")
+      end
+
+      it 'has link to storage units index' do
+    
+        visit "/storage_units"
+    
+        expect(page).to have_link("Storage Unit Index")
+        click_link("Storage Unit Index")
+        expect(current_path).to eq("/storage_units/")
       end
     end
 
-    it 'includes the timestamp of when each was created' do
-      lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
-      sleep(1)
-      lab2 = StorageUnit.create!(name: 'lab2', size: 4.0, fireproof: false)
-      sleep(1)
-      hallway = StorageUnit.create!(name: 'hallway', size: 1.5, fireproof: false)
-      sleep(1)
-      basement = StorageUnit.create!(name: 'basement', size: 8.0, fireproof: true)
 
-      visit "/storage_units"
-
-      expect(page).to have_content(lab1.created_at)
-      expect(page).to have_content(lab2.created_at)
-      expect(page).to have_content(hallway.created_at)
-      expect(page).to have_content(basement.created_at)
-
-      expect(lab2.name).to appear_before(lab1.name)
-      expect(basement.name).to appear_before(hallway.name)
-    end
-
-    it 'has link to chemicals index' do
-      lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
-  
-      ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 600.00, flammable: true, storage_unit_id: 1)
-  
-      visit "/storage_units"
-  
-      expect(page).to have_link("Chemicals Index")
-      click_link("Chemicals Index")
-      expect(current_path).to eq("/chemicals/")
-    end
-    it 'has link to storage units index' do
-      lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
-  
-      ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 600.00, flammable: true, storage_unit_id: 1)
-  
-      visit "/storage_units"
-  
-      expect(page).to have_link("Storage Unit Index")
-      click_link("Storage Unit Index")
-      expect(current_path).to eq("/storage_units/")
-    end
-
-    it 'has link to create new storage unit record' do
-      lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)
-  
-      ethanol = lab1.chemicals.create!(name: 'ethanol', amount: 600.00, flammable: true, storage_unit_id: 1)
-  
-      visit "/storage_units"
-  
-      expect(page).to have_link("Add new storage unit")
-      click_link("Add new storage unit")
-      expect(current_path).to eq("/storage_units/new")
-    end
 
     it 'has a link to edit storage unit info on index page' do
       lab1 = StorageUnit.create!(name: 'lab1', size: 3.0, fireproof: true)

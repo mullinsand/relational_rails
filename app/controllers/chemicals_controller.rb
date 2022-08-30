@@ -21,12 +21,6 @@ class ChemicalsController < ApplicationController
 
     redirect_to "/storage_units/#{chemical.storage_unit_id}/chemicals"
   end
-
-
-
-  def to_boolean(string)
-    ActiveRecord::Type::Boolean.new.cast(string)
-  end
   
   def show
     @storage_units = StorageUnit.all

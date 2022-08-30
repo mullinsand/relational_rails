@@ -10,6 +10,7 @@
   <%= form.label :flammable_false, "Chemical is not flammable"%><br>
   <%= form.label :storage_unit_id, "Storage Unit"%><br>
   <% all_units = @storage_units.map(&:name).zip(@storage_units.map(&:id)) %>
+  <!-- build options array -->
   <%= form.select :storage_unit_id,
                   all_units,
                   selected: @storage_unit_name,
